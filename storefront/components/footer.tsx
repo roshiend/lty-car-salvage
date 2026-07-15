@@ -15,8 +15,7 @@ export function Footer() {
               <span className="text-xl font-bold text-foreground">SalvageAuto</span>
             </Link>
             <p className="text-sm text-muted-foreground mb-4">
-              Family-run business specialising in professionally repaired salvage vehicles. 
-              Quality cars at affordable prices since 2014.
+              We buy cars from salvage places, repair them in our workshop, and sell below market value. Previously salvaged vehicles — sold as seen, with repair details available on request.
             </p>
             <div className="flex items-center gap-4">
               <a href="#" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="Facebook">
@@ -76,7 +75,7 @@ export function Footer() {
               </li>
               <li>
                 <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Warranty Info
+                  Buying Guide
                 </Link>
               </li>
             </ul>
@@ -88,7 +87,7 @@ export function Footer() {
             <ul className="space-y-3">
               <li className="flex items-start gap-2 text-sm text-muted-foreground">
                 <Phone className="h-4 w-4 mt-0.5 text-primary" />
-                <a href="tel:01211234567" className="hover:text-foreground transition-colors">
+                <a href="tel:01212345678" className="hover:text-foreground transition-colors">
                   0121 234 5678
                 </a>
               </li>

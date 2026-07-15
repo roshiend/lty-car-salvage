@@ -1,41 +1,41 @@
-import { Shield, Eye, BadgePoundSterling, Headphones, FileText, Award } from "lucide-react"
+import { Eye, BadgePoundSterling, Headphones, Award, Gavel, Wrench } from "lucide-react"
 
 const features = [
   {
-    icon: Eye,
-    title: "Full Transparency",
+    icon: Gavel,
+    title: "Salvage Sourced",
     description:
-      "We show you exactly what repairs were done. No hidden surprises - just honest information.",
+      "We buy cars from UK salvage auctions and salvage yards, selecting vehicles we can repair properly and sell at a fair price.",
+  },
+  {
+    icon: Wrench,
+    title: "Workshop Repaired",
+    description:
+      "Every car is repaired in our own workshop before it goes on sale. We do the work ourselves — we don't just broker cars.",
   },
   {
     icon: BadgePoundSterling,
     title: "Below Market Value",
     description:
-      "Save 40% or more compared to retail prices on quality vehicles.",
+      "Because we source and repair in-house, our prices sit below what you'd pay at a main dealer or forecourt.",
   },
   {
-    icon: Shield,
-    title: "3 Month Warranty",
+    icon: Eye,
+    title: "Honest About Repairs",
     description:
-      "All our vehicles come with a 3 month mechanical warranty for peace of mind.",
-  },
-  {
-    icon: FileText,
-    title: "HPI Clear",
-    description:
-      "Every car is HPI checked with no outstanding finance or stolen markers.",
+      "We'll tell you what category the car was and what work we've done. Ask us anything — we'd rather you know upfront.",
   },
   {
     icon: Headphones,
-    title: "Personal Service",
+    title: "Speak to Us Directly",
     description:
-      "Speak directly with the people who repair the cars. We&apos;re always happy to answer questions.",
+      "No call centre, no middleman. You talk to the people who buy and repair the cars.",
   },
   {
     icon: Award,
     title: "MOT Included",
     description:
-      "All vehicles are sold with a fresh MOT. Drive away with confidence.",
+      "Vehicles are sold with a fresh MOT so you can drive away knowing it's road-legal.",
   },
 ]
 
@@ -45,10 +45,10 @@ export function Features() {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4 text-balance">
-            Honest Cars, Fair Prices
+            Why Buy From Us?
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-pretty">
-            We&apos;re a small team who take pride in our work. Every car is repaired to a high standard and sold at a fair price.
+            We buy salvage cars, fix them properly, and sell below market value. Straightforward cars, honest pricing, no nonsense.
           </p>
         </div>
 

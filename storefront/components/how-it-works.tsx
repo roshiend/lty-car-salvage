@@ -3,23 +3,23 @@ import { Gavel, Wrench, CheckCircle, Car } from 'lucide-react'
 const steps = [
   {
     icon: Gavel,
-    title: 'We Source',
-    description: 'We purchase salvage vehicles from major UK insurance auctions, carefully selecting cars with the best repair potential.',
+    title: 'We Buy',
+    description: 'We source cars from UK salvage auctions and salvage yards, choosing vehicles we know we can repair properly.',
   },
   {
     icon: Wrench,
     title: 'We Repair',
-    description: 'Our experienced technicians professionally repair each vehicle in our workshop using quality parts and proven techniques.',
+    description: 'Each car is repaired in our own workshop by our experienced team before it goes anywhere near our forecourt.',
   },
   {
     icon: CheckCircle,
-    title: 'We Inspect',
-    description: 'Every car undergoes thorough quality checks and is fully MOT tested before being added to our stock.',
+    title: 'We Prepare',
+    description: 'Every car is checked over and sold with a fresh MOT, with repair details available if you want them.',
   },
   {
     icon: Car,
-    title: 'You Drive Away',
-    description: 'Choose your car, complete the purchase, and drive away in a quality vehicle at a fraction of the market price.',
+    title: 'You Save',
+    description: 'Because we buy and repair ourselves, we sell below market value — no dealership markups.',
   },
 ]
 
@@ -29,17 +29,16 @@ export function HowItWorks() {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            How We Do It
+            How It Works
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            We handle everything from auction to your driveway. Our process ensures you get a quality vehicle at an unbeatable price.
+            Simple process: we buy salvage cars, fix them in our workshop, and sell them below what you&apos;d pay elsewhere.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {steps.map((step, index) => (
             <div key={step.title} className="relative">
-              {/* Connector line */}
               {index < steps.length - 1 && (
                 <div className="hidden lg:block absolute top-8 left-[60%] w-[80%] h-[2px] bg-border" />
               )}

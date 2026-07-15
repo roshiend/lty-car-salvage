@@ -1,36 +1,36 @@
-import { Shield, Award, FileCheck, Clock, CheckCircle, BadgeCheck } from "lucide-react"
+import { Award, CheckCircle, Wrench, Gavel, BadgeCheck, PoundSterling } from "lucide-react"
 
 export function TrustBadges() {
   const badges = [
     {
-      icon: Shield,
-      title: "3 Month Warranty",
-      description: "Every vehicle comes with warranty cover",
+      icon: Gavel,
+      title: "Salvage Sourced",
+      description: "Bought direct from UK salvage auctions and yards",
     },
     {
-      icon: FileCheck,
-      title: "HPI Clear",
-      description: "Full history check on all vehicles",
+      icon: Wrench,
+      title: "Workshop Repaired",
+      description: "Fixed in our own workshop before sale",
+    },
+    {
+      icon: PoundSterling,
+      title: "Below Market Value",
+      description: "Priced lower than typical retail",
     },
     {
       icon: BadgeCheck,
       title: "MOT Included",
-      description: "Fresh MOT on every car we sell",
-    },
-    {
-      icon: Award,
-      title: "Professional Repairs",
-      description: "All work done by qualified technicians",
+      description: "Sold with a fresh MOT",
     },
     {
       icon: CheckCircle,
-      title: "Transparent Pricing",
-      description: "No hidden fees or surprise costs",
+      title: "Repair History",
+      description: "We tell you what was fixed",
     },
     {
-      icon: Clock,
+      icon: Award,
       title: "Family Business",
-      description: "Honest, personal service every time",
+      description: "Deal directly with us, not a salesman",
     },
   ]
 
@@ -39,10 +39,10 @@ export function TrustBadges() {
       <div className="container mx-auto px-4">
         <div className="text-center mb-8">
           <h2 className="text-xl font-semibold text-foreground mb-2">
-            Why Buy From Us?
+            What We Do
           </h2>
-          <p className="text-muted-foreground text-sm">
-            We&apos;re a small family business committed to quality and honesty
+          <p className="text-muted-foreground text-sm max-w-xl mx-auto">
+            We buy salvage cars, repair them in our workshop, and sell below market value
           </p>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">

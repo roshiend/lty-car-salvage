@@ -164,10 +164,13 @@ export function CarDetailClient({ car }: CarDetailClientProps) {
         {car.description && (
           <Card className="bg-card border-border">
             <CardHeader>
-              <CardTitle className="text-foreground">Description</CardTitle>
+              <CardTitle className="text-foreground">About This Vehicle</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground whitespace-pre-line">{car.description}</p>
+              <p className="text-xs text-muted-foreground mt-4 pt-4 border-t border-border">
+                This is a previously salvaged vehicle that has been repaired in our workshop. Sold below market value. Repair details available on request.
+              </p>
             </CardContent>
           </Card>
         )}
@@ -212,11 +215,11 @@ export function CarDetailClient({ car }: CarDetailClientProps) {
             <div className="space-y-3 mb-6 p-4 bg-secondary/50 rounded-lg">
               <div className="flex items-center gap-2 text-sm text-foreground">
                 <CheckCircle className="h-4 w-4 text-primary" />
-                3 Month Warranty Included
+                Salvage vehicle — professionally repaired
               </div>
               <div className="flex items-center gap-2 text-sm text-foreground">
                 <CheckCircle className="h-4 w-4 text-primary" />
-                HPI Clear Certificate
+                Sold below market value
               </div>
               <div className="flex items-center gap-2 text-sm text-foreground">
                 <CheckCircle className="h-4 w-4 text-primary" />
@@ -224,13 +227,13 @@ export function CarDetailClient({ car }: CarDetailClientProps) {
               </div>
               <div className="flex items-center gap-2 text-sm text-foreground">
                 <CheckCircle className="h-4 w-4 text-primary" />
-                Professional Repairs
+                Repair details available on request
               </div>
             </div>
 
             <div className="space-y-3">
               <Button className="w-full" size="lg" asChild>
-                <a href="tel:01onal212345678">
+                <a href="tel:01212345678">
                   <Phone className="h-4 w-4 mr-2" />
                   Call Us: 0121 234 5678
                 </a>
@@ -279,7 +282,7 @@ export function CarDetailClient({ car }: CarDetailClientProps) {
                     id="message"
                     rows={3}
                     placeholder="I'm interested in this vehicle..."
-                    defaultValue={`Hi, I'm interested in the ${car.year} ${car.make} ${car.model}. Please get in touch.`}
+                    defaultValue={`Hi, I'm interested in the ${car.year} ${car.make} ${car.model}. Could you tell me more about the repairs carried out?`}
                   />
                 </div>
                 <Button type="submit" className="w-full">

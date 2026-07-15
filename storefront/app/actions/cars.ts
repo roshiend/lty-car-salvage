@@ -14,21 +14,35 @@ async function getAdminSession() {
 }
 
 export async function getCars(includeAll = false) {
-  if (includeAll) {
-    return db.select().from(cars).orderBy(desc(cars.createdAt))
+  if (!process.env.DATABASE_URL) return []
+
+  try {
+    if (includeAll) {
+      return db.select().from(cars).orderBy(desc(cars.createdAt))
+    }
+    return db
+      .select()
+      .from(cars)
+      .where(and(eq(cars.isSold, false), eq(cars.isDummy, false)))
+      .orderBy(desc(cars.createdAt))
+  } catch (error) {
+    console.error("Failed to fetch cars:", error)
+    return []
   }
-  return db
-    .select()
-    .from(cars)
-    .where(and(eq(cars.isSold, false), eq(cars.isDummy, false)))
-    .orderBy(desc(cars.createdAt))
 }
 
 export async function getCarById(id: number) {
-  const result = await db.select().from(cars).where(eq(cars.id, id))
-  const car = result[0] || null
-  if (car?.isDummy) return null
-  return car
+  if (!process.env.DATABASE_URL) return null
+
+  try {
+    const result = await db.select().from(cars).where(eq(cars.id, id))
+    const car = result[0] || null
+    if (car?.isDummy) return null
+    return car
+  } catch (error) {
+    console.error("Failed to fetch car:", error)
+    return null
+  }
 }
 
 export async function createCar(data: {

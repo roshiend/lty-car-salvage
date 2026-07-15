@@ -1,4 +1,4 @@
-import { Users, Award, Heart } from 'lucide-react'
+import { Users, Heart, Wrench } from 'lucide-react'
 
 export function AboutSection() {
   return (
@@ -8,22 +8,17 @@ export function AboutSection() {
           <div>
             <span className="text-sm font-medium text-primary mb-2 block">About Us</span>
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6 text-balance">
-              A Family Business Built on Trust
+              Salvage Cars, Properly Repaired
             </h2>
             <div className="space-y-4 text-muted-foreground">
               <p>
-                We&apos;re a small, family-run business based in the West Midlands. What started as a passion 
-                for cars has grown into a trusted local business helping everyday people get quality 
-                vehicles at prices they can actually afford.
+                We&apos;re a family-run business in the West Midlands. We don&apos;t run a big showroom or employ pushy sales staff — we buy cars from salvage places, repair them ourselves, and sell them below market value.
               </p>
               <p>
-                We personally attend UK insurance auctions, carefully selecting vehicles with the best 
-                potential. Every car is repaired in our own workshop by our experienced team using quality 
-                parts. We don&apos;t cut corners — your safety is our priority.
+                Every car goes through our own workshop before it&apos;s listed. We&apos;re upfront about what&apos;s been repaired, and we&apos;re happy to talk you through the work if you want to know more.
               </p>
               <p>
-                Unlike big dealerships, you&apos;ll deal directly with us. We&apos;re happy to show you around, 
-                explain our repair process, and answer any questions. No pressure sales, just honest advice.
+                You deal directly with the people who source and fix the cars. Viewings are welcome, questions are encouraged, and there&apos;s no pressure — just straight answers about what you&apos;re buying.
               </p>
             </div>
             
@@ -34,14 +29,14 @@ export function AboutSection() {
                 <p className="text-sm text-muted-foreground">Owned &amp; Run</p>
               </div>
               <div className="text-center">
-                <Award className="h-8 w-8 text-primary mx-auto mb-2" />
-                <p className="text-2xl font-bold text-foreground">10+ Yrs</p>
-                <p className="text-sm text-muted-foreground">Experience</p>
+                <Wrench className="h-8 w-8 text-primary mx-auto mb-2" />
+                <p className="text-2xl font-bold text-foreground">In-House</p>
+                <p className="text-sm text-muted-foreground">Workshop</p>
               </div>
               <div className="text-center">
                 <Heart className="h-8 w-8 text-primary mx-auto mb-2" />
-                <p className="text-2xl font-bold text-foreground">100%</p>
-                <p className="text-sm text-muted-foreground">Passion</p>
+                <p className="text-2xl font-bold text-foreground">Honest</p>
+                <p className="text-sm text-muted-foreground">Pricing</p>
               </div>
             </div>
           </div>
@@ -54,12 +49,11 @@ export function AboutSection() {
                 </div>
                 <p className="text-lg font-semibold text-foreground mb-2">Meet the Team</p>
                 <p className="text-sm text-muted-foreground">
-                  Your photo here — add a friendly team photo to build trust with customers
+                  The people who buy, repair, and sell every car on this site
                 </p>
               </div>
             </div>
             
-            {/* Trust indicator */}
             <div className="absolute -bottom-4 -right-4 bg-primary text-primary-foreground px-4 py-2 rounded-lg shadow-lg">
               <p className="text-sm font-semibold">Viewings Welcome</p>
             </div>

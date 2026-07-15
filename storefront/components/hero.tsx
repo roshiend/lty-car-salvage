@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Shield, PoundSterling, Truck } from "lucide-react"
+import { Wrench, PoundSterling, Truck } from "lucide-react"
 
 export function Hero() {
   return (
@@ -11,9 +11,9 @@ export function Hero() {
       <div className="container mx-auto px-4 relative">
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
-            <Shield className="h-4 w-4 text-primary" />
+            <Wrench className="h-4 w-4 text-primary" />
             <span className="text-sm font-medium text-primary">
-              HPI Clear &amp; MOT Included
+              Salvage Sourced · Workshop Repaired
             </span>
           </div>
 
@@ -23,7 +23,7 @@ export function Hero() {
           </h1>
 
           <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto text-pretty">
-            Save up to 40% on your next car. We source salvage vehicles from UK auctions, professionally repair them in our workshop, and pass the savings directly to you. Every vehicle comes HPI clear with fresh MOT.
+            We buy cars from salvage places, repair them in our own workshop, and sell them below market value. No big dealership markups — just honest cars at fair prices.
           </p>
 
           {/* CTA */}
@@ -46,10 +46,10 @@ export function Hero() {
               </div>
             </div>
             <div className="flex items-center justify-center gap-3 p-4 rounded-lg bg-card border border-border">
-              <Shield className="h-8 w-8 text-primary" />
+              <Wrench className="h-8 w-8 text-primary" />
               <div className="text-left">
-                <p className="text-2xl font-bold text-foreground">3 Month</p>
-                <p className="text-sm text-muted-foreground">Warranty Included</p>
+                <p className="text-2xl font-bold text-foreground">In-House</p>
+                <p className="text-sm text-muted-foreground">Workshop Repairs</p>
               </div>
             </div>
             <div className="flex items-center justify-center gap-3 p-4 rounded-lg bg-card border border-border">

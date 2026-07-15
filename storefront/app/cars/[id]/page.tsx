@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import { getCarById, getCars } from "@/app/actions/cars"
+import { getCarById } from "@/app/actions/cars"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { CarDetailClient } from "@/components/car-detail-client"
@@ -10,13 +10,6 @@ import { ArrowLeft } from "lucide-react"
 
 interface CarPageProps {
   params: Promise<{ id: string }>
-}
-
-export async function generateStaticParams() {
-  const cars = await getCars()
-  return cars.map((car) => ({
-    id: car.id.toString(),
-  }))
 }
 
 export default async function CarPage({ params }: CarPageProps) {

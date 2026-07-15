@@ -3,12 +3,14 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
+export const dynamic = 'force-dynamic'
+
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'SalvageAuto - Quality Salvage & Rebuilt Title Vehicles',
-  description: 'Find affordable salvage and rebuilt title vehicles. Browse our inventory of quality used cars at unbeatable prices.',
+  title: 'SalvageAuto - Salvage Cars Repaired & Sold Below Market Value',
+  description: 'We buy cars from salvage places, repair them in our workshop, and sell below market value. Browse our stock of workshop-repaired vehicles.',
   generator: 'v0.app',
   icons: {
     icon: [

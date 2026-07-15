@@ -31,6 +31,7 @@ const trustedOrigins = [
 export const auth = betterAuth({
   database: pool,
   baseURL: getBaseURL(),
+  secret: process.env.BETTER_AUTH_SECRET,
   trustedOrigins,
   emailAndPassword: {
     enabled: true,

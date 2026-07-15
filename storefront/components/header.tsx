@@ -10,12 +10,11 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      {/* Top bar */}
       <div className="hidden md:block border-b border-border bg-secondary/50">
         <div className="container mx-auto px-4 py-2">
           <div className="flex items-center justify-between text-sm text-muted-foreground">
             <div className="flex items-center gap-6">
-              <a href="tel:01211234567" className="flex items-center gap-2 hover:text-foreground transition-colors">
+              <a href="tel:01212345678" className="flex items-center gap-2 hover:text-foreground transition-colors">
                 <Phone className="h-4 w-4" />
                 0121 234 5678
               </a>
@@ -24,12 +23,11 @@ export function Header() {
                 info@salvageauto.co.uk
               </a>
             </div>
-            <p>UK Delivery Available</p>
+            <p>Salvage cars repaired &amp; sold below market value</p>
           </div>
         </div>
       </div>
 
-      {/* Main nav */}
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
@@ -39,7 +37,6 @@ export function Header() {
             <span className="text-xl font-bold text-foreground">SalvageAuto</span>
           </Link>
 
-          {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-8">
             <Link href="/" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
               Home
@@ -59,18 +56,18 @@ export function Header() {
           </nav>
 
           <div className="hidden md:flex items-center gap-4">
-            <Button variant="outline" size="sm">
-              Call Us
+            <Button variant="outline" size="sm" asChild>
+              <a href="tel:01212345678">Call Us</a>
             </Button>
-            <Button size="sm">
-              View Stock
+            <Button size="sm" asChild>
+              <Link href="#inventory">View Stock</Link>
             </Button>
           </div>
 
-          {/* Mobile menu button */}
           <button
             className="md:hidden p-2"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
           >
             {mobileMenuOpen ? (
               <X className="h-6 w-6 text-foreground" />
@@ -80,7 +77,6 @@ export function Header() {
           </button>
         </div>
 
-        {/* Mobile menu */}
         {mobileMenuOpen && (
           <div className="md:hidden py-4 border-t border-border">
             <nav className="flex flex-col gap-4">
@@ -100,11 +96,11 @@ export function Header() {
                 Contact
               </Link>
               <div className="flex flex-col gap-2 pt-4">
-                <Button variant="outline" size="sm" className="w-full">
-                  Call Us
+                <Button variant="outline" size="sm" className="w-full" asChild>
+                  <a href="tel:01212345678">Call Us</a>
                 </Button>
-                <Button size="sm" className="w-full">
-                  View Stock
+                <Button size="sm" className="w-full" asChild>
+                  <Link href="#inventory">View Stock</Link>
                 </Button>
               </div>
             </nav>

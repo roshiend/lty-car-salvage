@@ -20,8 +20,6 @@ export function CarCard({ car }: CarCardProps) {
 
   const price = Number(car.price)
   const marketValue = Number(car.marketValue)
-  const savings = marketValue - price
-  const savingsPercent = Math.round((savings / marketValue) * 100)
 
   return (
     <Card className="group overflow-hidden bg-card border-border hover:border-primary/50 transition-all duration-300">
@@ -45,7 +43,7 @@ export function CarCard({ car }: CarCardProps) {
         <div className="absolute top-3 right-3">
           <Badge variant="secondary" className="bg-primary text-primary-foreground">
             <TrendingDown className="h-3 w-3 mr-1" />
-            Save {savingsPercent}%
+            Below market
           </Badge>
         </div>
       </div>

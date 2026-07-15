@@ -5,7 +5,7 @@ import type { Car } from "@/lib/db/schema"
 import { CarCard } from "@/components/car-card"
 import { Filters, FilterState, defaultFilters } from "@/components/filters"
 import { Button } from "@/components/ui/button"
-import { Car as CarIcon } from "lucide-react"
+import { Car as CarIcon, Phone } from "lucide-react"
 
 interface InventoryProps {
   cars: Car[]
@@ -17,7 +17,6 @@ export function Inventory({ cars }: InventoryProps) {
 
   const filteredCars = useMemo(() => {
     return cars.filter((car) => {
-      // Search filter
       if (filters.search) {
         const searchLower = filters.search.toLowerCase()
         const matchesSearch =
@@ -26,22 +25,18 @@ export function Inventory({ cars }: InventoryProps) {
         if (!matchesSearch) return false
       }
 
-      // Make filter
       if (filters.make !== "all" && car.make !== filters.make) {
         return false
       }
 
-      // Category filter
       if (filters.titleStatus !== "all" && car.category !== filters.titleStatus) {
         return false
       }
 
-      // Body type filter
       if (filters.damageType !== "all" && car.bodyType !== filters.damageType) {
         return false
       }
 
-      // Price range filter
       const price = Number(car.price)
       if (price < filters.priceRange[0] || price > filters.priceRange[1]) {
         return false
@@ -52,8 +47,6 @@ export function Inventory({ cars }: InventoryProps) {
   }, [filters, cars])
 
   const displayedCars = showAll ? filteredCars : filteredCars.slice(0, 6)
-
-  // Get unique makes from actual data
   const uniqueMakes = [...new Set(cars.map((c) => c.make))].sort()
 
   return (
@@ -64,16 +57,32 @@ export function Inventory({ cars }: InventoryProps) {
             Our Current Stock
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-pretty">
-            All vehicles professionally repaired in our workshop and sold below market value. New stock added weekly.
+            Salvage cars bought, repaired in our workshop, and priced below market value. New stock added as it becomes ready.
           </p>
         </div>
 
-        <Filters filters={filters} onFilterChange={setFilters} availableMakes={uniqueMakes} />
+        {cars.length > 0 && (
+          <Filters filters={filters} onFilterChange={setFilters} availableMakes={uniqueMakes} />
+        )}
 
-        {filteredCars.length === 0 ? (
+        {cars.length === 0 ? (
+          <div className="text-center py-12 max-w-lg mx-auto">
+            <CarIcon className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+            <p className="text-lg font-semibold text-foreground">No vehicles listed right now</p>
+            <p className="text-muted-foreground mt-2">
+              We&apos;re always buying and repairing salvage cars. Call us to find out what&apos;s coming in next.
+            </p>
+            <Button className="mt-6 gap-2" asChild>
+              <a href="tel:01212345678">
+                <Phone className="h-4 w-4" />
+                Call: 0121 234 5678
+              </a>
+            </Button>
+          </div>
+        ) : filteredCars.length === 0 ? (
           <div className="text-center py-12">
             <CarIcon className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <p className="text-lg text-muted-foreground">No vehicles match your criteria.</p>
+            <p className="text-lg text-muted-foreground">No vehicles match your filters.</p>
             <Button
               variant="outline"
               className="mt-4"
