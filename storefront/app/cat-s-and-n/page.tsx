@@ -31,13 +31,13 @@ export default function CatSandNPage() {
       <h2>Repaired</h2>
       <p>
         Some of our stock is listed as Repaired — meaning salvage history applies but the vehicle has
-        been through our workshop and is ready for sale. Ask us for details of what was fixed.
+        been through our workshop and is ready for sale.
       </p>
 
       <h2>What this means when buying from {COMPANY_NAME}</h2>
       <ul>
         <li>Every car has a salvage history — we do not hide it.</li>
-        <li>We tell you the category and what repairs we have carried out.</li>
+        <li>We show the salvage category on every listing.</li>
         <li>Vehicles are not HPI clear.</li>
         <li>Viewings are welcome before you commit.</li>
       </ul>

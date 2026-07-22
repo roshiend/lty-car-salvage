@@ -79,7 +79,7 @@ ${message}`
     "Salvage vehicle — professionally repaired",
     "Sold below market value",
     ...(car.motExpiry ? ["Valid MOT included"] : []),
-    "Repair details available on request",
+    `${car.category} — salvage category shown`,
   ]
 
   const specs = [
@@ -202,7 +202,7 @@ ${message}`
             <CardContent>
               <p className="text-muted-foreground whitespace-pre-line">{car.description}</p>
               <p className="text-xs text-muted-foreground mt-4 pt-4 border-t border-border">
-                This is a previously salvaged vehicle that has been repaired in our workshop. Sold below market value. Repair details available on request.
+                This is a previously salvaged vehicle that has been repaired in our workshop. Sold below market value.
               </p>
             </CardContent>
           </Card>
@@ -313,7 +313,7 @@ ${message}`
                     name="message"
                     rows={3}
                     placeholder="I'm interested in this vehicle..."
-                    defaultValue={`Hi, I'm interested in the ${car.year} ${car.make} ${car.model}. Could you tell me more about the repairs carried out?`}
+                    defaultValue={`Hi, I'm interested in the ${car.year} ${car.make} ${car.model}.`}
                   />
                 </div>
                 <Button type="submit" className="w-full gap-2">

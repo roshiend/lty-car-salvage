@@ -31,10 +31,11 @@ export function Hero() {
             </span>
             . No big dealership markups — just honest cars at fair prices.
           </p>
+        </div>
 
-          <RecoveryBanner className="mb-10 max-w-4xl mx-auto" />
+        <RecoveryBanner className="mb-8 sm:mb-10 max-w-6xl mx-auto w-full" />
 
-          {/* CTA */}
+        <div className="max-w-4xl mx-auto text-center">
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="h-12 px-8" asChild>
               <Link href="#inventory">Browse Our Stock</Link>

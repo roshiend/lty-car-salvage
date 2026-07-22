@@ -35,15 +35,15 @@ const disclosures = [
 const trustPoints = [
   {
     icon: ShieldCheck,
-    title: "Repair details on request",
+    title: "Salvage category shown",
     description:
-      "We’ll tell you the salvage category and what we’ve fixed on each car — just ask before you buy.",
+      "Each listing shows the salvage category (Cat S or Cat N) so you know what you are buying.",
   },
   {
     icon: Car,
     title: "Viewings, collection & delivery",
     description:
-      "See the car at our Birmingham unit before you buy. Collect in person, or ask us to arrange delivery — charges apply.",
+      "Viewings welcome by appointment. Collect in person, or ask us about delivery — charges apply.",
   },
   {
     icon: MessageCircle,
@@ -66,9 +66,8 @@ export function AboutSection() {
               <span className="whitespace-nowrap">No Nonsense.</span>
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              Based in the West Midlands — a local workshop, not a dealer forecourt. When you get in
-              touch or come for a viewing, you deal with the people who actually handle the cars. No
-              sales team, no pressure.
+              We&apos;re a workshop-based seller, not a dealer forecourt. When you get in touch, you
+              deal with the people who actually handle the cars. No sales team, no pressure.
             </p>
 
             <div className="mt-8 pt-8 border-t border-border lg:mt-auto">

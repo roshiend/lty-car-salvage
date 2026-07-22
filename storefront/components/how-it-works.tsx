@@ -17,7 +17,7 @@ const steps = [
     icon: CheckCircle,
     title: "We Prepare",
     description:
-      "Every car is checked over and serviced, with repair details available if you want them.",
+      "Every car is checked over and serviced before it goes on sale.",
   },
   {
     icon: Car,

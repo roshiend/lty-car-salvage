@@ -18,8 +18,7 @@ export default function TermsPage() {
       <h2>Vehicles sold as seen</h2>
       <p>
         Our cars are previously salvaged vehicles that have been repaired in our workshop. They are
-        sold as seen. We will provide repair details on request, but you are responsible for
-        inspecting the vehicle before purchase.
+        sold as seen. You are responsible for inspecting the vehicle before purchase.
       </p>
 
       <h2>No HPI clear</h2>

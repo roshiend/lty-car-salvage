@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { MessageCircle, Mail, MapPin, Clock } from "lucide-react"
+import { MessageCircle, Mail, Clock } from "lucide-react"
 import { WHATSAPP_DISPLAY, WHATSAPP_URL } from "@/lib/contact"
 import { COMPANY_EMAIL } from "@/lib/brand"
 import { Logo } from "@/components/logo"
@@ -12,8 +12,8 @@ export function Footer() {
           <div>
             <Logo className="mb-4" />
             <p className="text-sm text-muted-foreground mb-4">
-              Workshop-repaired salvage cars sold below market value. Previously salvaged vehicles —
-              sold as seen, with repair details available on request.
+              Workshop-repaired salvage cars sold below market value. Previously salvaged vehicles
+              sold as seen.
             </p>
           </div>
 
@@ -81,14 +81,7 @@ export function Footer() {
               </li>
               <li className="flex items-start gap-2 text-sm text-muted-foreground">
                 <Clock className="h-4 w-4 mt-0.5 text-primary" />
-                <span>Mon-Sat 9am-6pm</span>
-              </li>
-              <li className="flex items-start gap-2 text-sm text-muted-foreground">
-                <MapPin className="h-4 w-4 mt-0.5 text-primary" />
-                <span>
-                  Unit 5, Industrial Estate<br />
-                  Birmingham, B15 2TT
-                </span>
+                <span>Mon–Sat 9am–6pm · Viewings by appointment</span>
               </li>
             </ul>
           </div>

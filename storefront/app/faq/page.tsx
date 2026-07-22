@@ -13,19 +13,18 @@ export default function FaqPage() {
     <InfoPageLayout title="Frequently Asked Questions">
       <h2>Are your cars HPI clear?</h2>
       <p>
-        No. Our vehicles are previously salvaged and are not sold as HPI clear. We disclose the
-        salvage category and repair details on request.
+        No. Our vehicles are not sold as HPI clear. We always disclose the salvage category on each
+        listing.
       </p>
 
       <h2>Do you offer a warranty?</h2>
       <p>
-        No. Vehicles are sold as seen. We repair them in our own workshop and can explain what work
-        has been carried out before you buy.
+        No. Vehicles are sold as seen. We repair them in our own workshop before sale.
       </p>
 
       <h2>Can I view a car before buying?</h2>
       <p>
-        Yes. Viewings are welcome at our Birmingham unit. Message us on WhatsApp to arrange a
+        Yes. Viewings are welcome by appointment. Message us on WhatsApp and we&apos;ll arrange a
         convenient time.
       </p>
 
