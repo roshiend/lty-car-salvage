@@ -1,14 +1,12 @@
 import { NextRequest, NextResponse } from "next/server"
 import { writeFile, mkdir } from "fs/promises"
 import path from "path"
+import { MAIN_SITE_URL } from "@/lib/site"
 
 // Saves to the storefront's public/uploads so images are served from the main site
 const UPLOAD_DIR =
   process.env.UPLOAD_DIR ||
   path.join(process.cwd(), "..", "storefront", "public", "uploads")
-
-const MAIN_SITE_URL =
-  process.env.NEXT_PUBLIC_MAIN_SITE_URL || "http://localhost:3000"
 
 const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"]
 const MAX_SIZE_MB = 10

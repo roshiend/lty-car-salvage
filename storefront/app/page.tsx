@@ -5,7 +5,6 @@ import { HowItWorks } from "@/components/how-it-works"
 import { AboutSection } from "@/components/about-section"
 import { CTA } from "@/components/cta"
 import { Footer } from "@/components/footer"
-import { TrustBadges } from "@/components/trust-badges"
 import { LocalBusinessJsonLd } from "@/components/local-business-jsonld"
 import { getCars } from "@/app/actions/cars"
 
@@ -20,7 +19,6 @@ export default async function Home() {
       <Header />
       <main>
         <Hero />
-        <TrustBadges />
         <Inventory cars={cars} />
         <HowItWorks />
         <AboutSection />

@@ -13,6 +13,7 @@ import {
   Clock,
 } from "lucide-react"
 import Link from "next/link"
+import { MAIN_SITE_URL } from "@/lib/site"
 import { getStatus } from "@/lib/car-status"
 
 export default async function DashboardPage() {
@@ -293,7 +294,7 @@ export default async function DashboardPage() {
                     </Link>
                     {!car.isDummy && (
                       <a
-                        href={`${process.env.NEXT_PUBLIC_MAIN_SITE_URL}/cars/${car.id}`}
+                        href={`${MAIN_SITE_URL}/cars/${car.id}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="p-2 rounded-lg border transition-all hover:bg-slate-100"
@@ -339,7 +340,7 @@ export default async function DashboardPage() {
                 View All Inventory
               </Link>
               <a
-                href={mainSiteUrl}
+                href={MAIN_SITE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold border transition-all hover:bg-slate-50"
@@ -451,4 +452,3 @@ export default async function DashboardPage() {
   )
 }
 
-const mainSiteUrl = process.env.NEXT_PUBLIC_MAIN_SITE_URL || "http://localhost:3000"

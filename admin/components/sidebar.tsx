@@ -15,7 +15,9 @@ import {
   X,
 } from "lucide-react"
 
-const mainSiteUrl = process.env.NEXT_PUBLIC_MAIN_SITE_URL || "http://localhost:3000"
+import { MAIN_SITE_URL } from "@/lib/site"
+
+const mainSiteUrl = MAIN_SITE_URL
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
