@@ -11,6 +11,7 @@ import { authClient } from "@/lib/auth-client"
 import { CarForm } from "./car-form"
 import { deleteCar, toggleCarSold } from "@/app/actions/cars"
 import Link from "next/link"
+import { Logo } from "@/components/logo"
 
 interface AdminDashboardProps {
   cars: Car[]
@@ -62,9 +63,7 @@ export function AdminDashboard({ cars, userName }: AdminDashboardProps) {
       <header className="border-b border-border bg-card">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link href="/" className="text-xl font-bold text-primary">
-              SalvageAuto
-            </Link>
+            <Logo size="sm" />
             <Badge variant="secondary">Admin</Badge>
           </div>
           <div className="flex items-center gap-4">

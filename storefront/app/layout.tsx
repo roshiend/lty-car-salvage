@@ -1,33 +1,40 @@
-import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
-import './globals.css'
+import type { Metadata } from "next"
+import { Geist, Geist_Mono } from "next/font/google"
+import { Analytics } from "@vercel/analytics/next"
+import { COMPANY_NAME, SITE_URL } from "@/lib/brand"
+import "./globals.css"
 
-export const dynamic = 'force-dynamic'
-
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+const geistSans = Geist({ subsets: ["latin"], variable: "--font-geist-sans" })
+const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" })
 
 export const metadata: Metadata = {
-  title: 'SalvageAuto - Salvage Cars Repaired & Sold Below Market Value',
-  description: 'We buy cars from salvage places, repair them in our workshop, and sell below market value. Browse our stock of workshop-repaired vehicles.',
-  generator: 'v0.app',
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: `${COMPANY_NAME} - Salvage Cars Repaired & Sold Below Market Value`,
+    template: `%s | ${COMPANY_NAME}`,
+  },
+  description:
+    "We buy cars from salvage places, repair them in our workshop, and sell below market value. Browse our stock of workshop-repaired vehicles.",
   icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
+    icon: "/logo-32.webp",
+    apple: "/logo-180.webp",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_GB",
+    url: SITE_URL,
+    siteName: COMPANY_NAME,
+    title: `${COMPANY_NAME} - Salvage Cars Repaired & Sold Below Market Value`,
+    description:
+      "Workshop-repaired salvage cars sold below market value. View our stock or message us on WhatsApp.",
+    images: [{ url: "/logo-180.webp", width: 180, height: 180, alt: `${COMPANY_NAME} logo` }],
+  },
+  twitter: {
+    card: "summary",
+    title: `${COMPANY_NAME} - Salvage Cars Repaired & Sold Below Market Value`,
+    description:
+      "Workshop-repaired salvage cars sold below market value. View our stock or message us on WhatsApp.",
+    images: ["/logo-180.webp"],
   },
 }
 
@@ -38,9 +45,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="bg-background">
-      <body className="font-sans antialiased">
+      <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}>
         {children}
-        {process.env.NODE_ENV === 'production' && <Analytics />}
+        {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
     </html>
   )

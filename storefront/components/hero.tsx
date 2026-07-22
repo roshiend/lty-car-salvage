@@ -1,6 +1,8 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Wrench, PoundSterling, Truck } from "lucide-react"
+import { Wrench, MessageCircle, PoundSterling } from "lucide-react"
+import { WHATSAPP_DISPLAY, WHATSAPP_URL } from "@/lib/contact"
+import { RecoveryBanner } from "@/components/recovery-banner"
 
 export function Hero() {
   return (
@@ -10,55 +12,39 @@ export function Hero() {
 
       <div className="container mx-auto px-4 relative">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
-            <Wrench className="h-4 w-4 text-primary" />
-            <span className="text-sm font-medium text-primary">
-              Salvage Sourced · Workshop Repaired
-            </span>
-          </div>
-
           <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 text-balance">
-            Quality <span className="text-primary">Salvage Cars</span> Repaired
-            &amp; Ready to Drive
+            Quality Salvage{" "}
+            <span className="text-primary">Cars Repaired</span>
+            {" "}&amp; Ready to Drive
           </h1>
 
-          <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto text-pretty">
-            We buy cars from salvage places, repair them in our own workshop, and sell them below market value. No big dealership markups — just honest cars at fair prices.
+          <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto text-pretty leading-relaxed">
+            We buy cars from salvage places, repair them{" "}
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 mx-0.5 rounded-full bg-primary/10 border border-primary/20 text-base font-medium text-primary align-middle">
+              <Wrench className="h-3.5 w-3.5 shrink-0" />
+              in our own workshop
+            </span>
+            , and sell them{" "}
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 mx-0.5 rounded-full bg-primary/10 border border-primary/20 text-base font-medium text-primary align-middle">
+              <PoundSterling className="h-3.5 w-3.5 shrink-0" />
+              below market value
+            </span>
+            . No big dealership markups — just honest cars at fair prices.
           </p>
 
+          <RecoveryBanner className="mb-10 max-w-4xl mx-auto" />
+
           {/* CTA */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="h-12 px-8" asChild>
               <Link href="#inventory">Browse Our Stock</Link>
             </Button>
-            <Button size="lg" variant="outline" className="h-12 px-8" asChild>
-              <a href="tel:01212345678">Call Us: 0121 234 5678</a>
+            <Button size="lg" variant="outline" className="h-12 px-8 gap-2" asChild>
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+                <MessageCircle className="h-4 w-4" />
+                WhatsApp: {WHATSAPP_DISPLAY}
+              </a>
             </Button>
-          </div>
-
-          {/* Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto">
-            <div className="flex items-center justify-center gap-3 p-4 rounded-lg bg-card border border-border">
-              <PoundSterling className="h-8 w-8 text-primary" />
-              <div className="text-left">
-                <p className="text-2xl font-bold text-foreground">Up to 40%</p>
-                <p className="text-sm text-muted-foreground">Below Market Value</p>
-              </div>
-            </div>
-            <div className="flex items-center justify-center gap-3 p-4 rounded-lg bg-card border border-border">
-              <Wrench className="h-8 w-8 text-primary" />
-              <div className="text-left">
-                <p className="text-2xl font-bold text-foreground">In-House</p>
-                <p className="text-sm text-muted-foreground">Workshop Repairs</p>
-              </div>
-            </div>
-            <div className="flex items-center justify-center gap-3 p-4 rounded-lg bg-card border border-border">
-              <Truck className="h-8 w-8 text-primary" />
-              <div className="text-left">
-                <p className="text-2xl font-bold text-foreground">UK Wide</p>
-                <p className="text-sm text-muted-foreground">Delivery Available</p>
-              </div>
-            </div>
           </div>
         </div>
       </div>

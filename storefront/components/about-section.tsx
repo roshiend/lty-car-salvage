@@ -1,61 +1,117 @@
-import { Users, Heart, Wrench } from 'lucide-react'
+import { cn } from "@/lib/utils"
+import {
+  Wrench,
+  ShieldCheck,
+  Car,
+  MessageCircle,
+  ShieldX,
+  FileWarning,
+  BadgeCheck,
+} from "lucide-react"
+
+const disclosures = [
+  {
+    icon: ShieldX,
+    label: "No HPI clear",
+    className: "bg-destructive/15 border-destructive/35 text-destructive",
+  },
+  {
+    icon: FileWarning,
+    label: "Some vehicles may not have a complete service history",
+    className: "bg-accent/20 border-accent/40 text-accent",
+  },
+  {
+    icon: Wrench,
+    label: "Every vehicle is serviced by us before sale",
+    className: "bg-primary/15 border-primary/35 text-primary",
+  },
+  {
+    icon: BadgeCheck,
+    label: "All vehicles are sold with a valid MOT",
+    className: "bg-sky-500/15 border-sky-500/35 text-sky-400",
+  },
+]
+
+const trustPoints = [
+  {
+    icon: ShieldCheck,
+    title: "Repair details on request",
+    description:
+      "We’ll tell you the salvage category and what we’ve fixed on each car — just ask before you buy.",
+  },
+  {
+    icon: Car,
+    title: "Viewings, collection & delivery",
+    description:
+      "See the car at our Birmingham unit before you buy. Collect in person, or ask us to arrange delivery — charges apply.",
+  },
+  {
+    icon: MessageCircle,
+    title: "Deal with us directly",
+    description:
+      "WhatsApp or email — you speak to the people who source and prepare the cars.",
+  },
+]
 
 export function AboutSection() {
   return (
     <section id="about" className="py-16 md:py-24 bg-card border-y border-border">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
+        <div className="flex flex-col lg:flex-row lg:items-stretch gap-12 lg:gap-16">
+          <div className="lg:flex-1 flex flex-col">
             <span className="text-sm font-medium text-primary mb-2 block">About Us</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6 text-balance">
-              Salvage Cars, Properly Repaired
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
+              <span className="whitespace-nowrap">Local Workshop.</span>{" "}
+              <span className="whitespace-nowrap">Honest Cars.</span>{" "}
+              <span className="whitespace-nowrap">No Nonsense.</span>
             </h2>
-            <div className="space-y-4 text-muted-foreground">
-              <p>
-                We&apos;re a family-run business in the West Midlands. We don&apos;t run a big showroom or employ pushy sales staff — we buy cars from salvage places, repair them ourselves, and sell them below market value.
+            <p className="text-muted-foreground leading-relaxed">
+              Based in the West Midlands — a local workshop, not a dealer forecourt. When you get in
+              touch or come for a viewing, you deal with the people who actually handle the cars. No
+              sales team, no pressure.
+            </p>
+
+            <div className="mt-8 pt-8 border-t border-border lg:mt-auto">
+              <p className="text-sm font-semibold text-foreground mb-4">
+                Important to know before you buy
               </p>
-              <p>
-                Every car goes through our own workshop before it&apos;s listed. We&apos;re upfront about what&apos;s been repaired, and we&apos;re happy to talk you through the work if you want to know more.
-              </p>
-              <p>
-                You deal directly with the people who source and fix the cars. Viewings are welcome, questions are encouraged, and there&apos;s no pressure — just straight answers about what you&apos;re buying.
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-3 gap-6 mt-8 pt-8 border-t border-border">
-              <div className="text-center">
-                <Users className="h-8 w-8 text-primary mx-auto mb-2" />
-                <p className="text-2xl font-bold text-foreground">Family</p>
-                <p className="text-sm text-muted-foreground">Owned &amp; Run</p>
-              </div>
-              <div className="text-center">
-                <Wrench className="h-8 w-8 text-primary mx-auto mb-2" />
-                <p className="text-2xl font-bold text-foreground">In-House</p>
-                <p className="text-sm text-muted-foreground">Workshop</p>
-              </div>
-              <div className="text-center">
-                <Heart className="h-8 w-8 text-primary mx-auto mb-2" />
-                <p className="text-2xl font-bold text-foreground">Honest</p>
-                <p className="text-sm text-muted-foreground">Pricing</p>
+              <div className="flex flex-wrap gap-2">
+                {disclosures.map((item) => (
+                  <span
+                    key={item.label}
+                    className={cn(
+                      "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-sm font-medium",
+                      item.className
+                    )}
+                  >
+                    <item.icon className="h-3.5 w-3.5 shrink-0" />
+                    {item.label}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
-          
-          <div className="relative">
-            <div className="aspect-[4/3] rounded-2xl bg-secondary/50 border border-border flex items-center justify-center overflow-hidden">
-              <div className="text-center p-8">
-                <div className="h-20 w-20 rounded-full bg-primary/10 border-2 border-primary mx-auto mb-4 flex items-center justify-center">
-                  <Users className="h-10 w-10 text-primary" />
-                </div>
-                <p className="text-lg font-semibold text-foreground mb-2">Meet the Team</p>
-                <p className="text-sm text-muted-foreground">
-                  The people who buy, repair, and sell every car on this site
-                </p>
+
+          <div className="lg:flex-1 flex flex-col min-h-0">
+            <div className="rounded-2xl border border-border bg-background/50 p-6 md:p-8 flex flex-col flex-1 min-h-full">
+              <div className="flex-1 flex flex-col">
+                <h3 className="text-xl font-bold text-foreground mb-6">What you can count on</h3>
+                <ul className="space-y-5 flex-1">
+                {trustPoints.map((point) => (
+                  <li key={point.title} className="flex gap-4">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 border border-primary/20">
+                      <point.icon className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-foreground text-sm">{point.title}</p>
+                      <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
+                        {point.description}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+                </ul>
               </div>
-            </div>
-            
-            <div className="absolute -bottom-4 -right-4 bg-primary text-primary-foreground px-4 py-2 rounded-lg shadow-lg">
-              <p className="text-sm font-semibold">Viewings Welcome</p>
             </div>
           </div>
         </div>

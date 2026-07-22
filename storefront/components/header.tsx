@@ -3,7 +3,10 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Car, Menu, X, Phone, Mail } from 'lucide-react'
+import { Menu, X, MessageCircle, Mail } from 'lucide-react'
+import { WHATSAPP_DISPLAY, WHATSAPP_URL } from '@/lib/contact'
+import { COMPANY_EMAIL } from '@/lib/brand'
+import { Logo } from '@/components/logo'
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -14,13 +17,13 @@ export function Header() {
         <div className="container mx-auto px-4 py-2">
           <div className="flex items-center justify-between text-sm text-muted-foreground">
             <div className="flex items-center gap-6">
-              <a href="tel:01212345678" className="flex items-center gap-2 hover:text-foreground transition-colors">
-                <Phone className="h-4 w-4" />
-                0121 234 5678
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-foreground transition-colors">
+                <MessageCircle className="h-4 w-4" />
+                {WHATSAPP_DISPLAY}
               </a>
-              <a href="mailto:info@salvageauto.co.uk" className="flex items-center gap-2 hover:text-foreground transition-colors">
+              <a href={`mailto:${COMPANY_EMAIL}`} className="flex items-center gap-2 hover:text-foreground transition-colors">
                 <Mail className="h-4 w-4" />
-                info@salvageauto.co.uk
+                {COMPANY_EMAIL}
               </a>
             </div>
             <p>Salvage cars repaired &amp; sold below market value</p>
@@ -29,13 +32,8 @@ export function Header() {
       </div>
 
       <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-primary">
-              <Car className="h-6 w-6 text-primary-foreground" />
-            </div>
-            <span className="text-xl font-bold text-foreground">SalvageAuto</span>
-          </Link>
+        <div className="flex h-[4.5rem] items-center justify-between">
+          <Logo />
 
           <nav className="hidden md:flex items-center gap-8">
             <Link href="/" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
@@ -56,8 +54,11 @@ export function Header() {
           </nav>
 
           <div className="hidden md:flex items-center gap-4">
-            <Button variant="outline" size="sm" asChild>
-              <a href="tel:01212345678">Call Us</a>
+            <Button variant="outline" size="sm" className="gap-2" asChild>
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+                <MessageCircle className="h-4 w-4" />
+                WhatsApp
+              </a>
             </Button>
             <Button size="sm" asChild>
               <Link href="#inventory">View Stock</Link>
@@ -96,8 +97,11 @@ export function Header() {
                 Contact
               </Link>
               <div className="flex flex-col gap-2 pt-4">
-                <Button variant="outline" size="sm" className="w-full" asChild>
-                  <a href="tel:01212345678">Call Us</a>
+                <Button variant="outline" size="sm" className="w-full gap-2" asChild>
+                  <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+                    <MessageCircle className="h-4 w-4" />
+                    WhatsApp
+                  </a>
                 </Button>
                 <Button size="sm" className="w-full" asChild>
                   <Link href="#inventory">View Stock</Link>

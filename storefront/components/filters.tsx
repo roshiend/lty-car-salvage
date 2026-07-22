@@ -26,7 +26,6 @@ export interface FilterState {
   titleStatus: string
   damageType: string
   priceRange: [number, number]
-  yearRange: [number, number]
 }
 
 export const defaultFilters: FilterState = {
@@ -35,7 +34,6 @@ export const defaultFilters: FilterState = {
   titleStatus: "all",
   damageType: "all",
   priceRange: [0, 40000],
-  yearRange: [2015, 2024],
 }
 
 const categories = ["Cat S", "Cat N", "Repaired"]

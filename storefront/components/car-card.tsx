@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -15,7 +16,7 @@ export function CarCard({ car }: CarCardProps) {
   const categoryColor = {
     "Cat S": "bg-destructive text-destructive-foreground",
     "Cat N": "bg-accent text-accent-foreground",
-    "Repaired": "bg-primary text-primary-foreground",
+    Repaired: "bg-primary text-primary-foreground",
   }
 
   const price = Number(car.price)
@@ -25,10 +26,12 @@ export function CarCard({ car }: CarCardProps) {
     <Card className="group overflow-hidden bg-card border-border hover:border-primary/50 transition-all duration-300">
       <div className="relative aspect-[4/3] overflow-hidden bg-secondary">
         {car.images && car.images.length > 0 ? (
-          <img
+          <Image
             src={car.images[0]}
             alt={`${car.year} ${car.make} ${car.model}`}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
@@ -59,12 +62,8 @@ export function CarCard({ car }: CarCardProps) {
         </div>
 
         <div className="flex items-baseline gap-2 mb-3">
-          <p className="text-2xl font-bold text-primary">
-            £{price.toLocaleString()}
-          </p>
-          <p className="text-sm text-muted-foreground line-through">
-            £{marketValue.toLocaleString()}
-          </p>
+          <p className="text-2xl font-bold text-primary">£{price.toLocaleString()}</p>
+          <p className="text-sm text-muted-foreground line-through">£{marketValue.toLocaleString()}</p>
         </div>
 
         <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">

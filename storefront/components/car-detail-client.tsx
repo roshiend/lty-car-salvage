@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Image from "next/image"
 import type { Car } from "@/lib/db/schema"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -17,12 +18,14 @@ import {
   Palette,
   DoorOpen,
   TrendingDown,
-  Phone,
+  MessageCircle,
   Mail,
   ChevronLeft,
   ChevronRight,
   CheckCircle,
 } from "lucide-react"
+import { whatsappUrl } from "@/lib/contact"
+import { COMPANY_EMAIL } from "@/lib/brand"
 
 interface CarDetailClientProps {
   car: Car
@@ -52,11 +55,32 @@ export function CarDetailClient({ car }: CarDetailClientProps) {
     setCurrentImage((prev) => (prev < images.length - 1 ? prev + 1 : 0))
   }
 
-  const handleEnquirySubmit = (e: React.FormEvent) => {
+  const handleEnquirySubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    // In production, this would send an email or save to database
+    const form = e.currentTarget
+    const formData = new FormData(form)
+    const name = formData.get("name") as string
+    const phone = formData.get("phone") as string
+    const email = formData.get("email") as string
+    const message = formData.get("message") as string
+
+    const text = `Hi, I'm ${name}. I'm interested in the ${car.year} ${car.make} ${car.model}.
+
+Phone: ${phone}
+Email: ${email}
+
+${message}`
+
+    window.open(whatsappUrl(text), "_blank", "noopener,noreferrer")
     setEnquirySubmitted(true)
   }
+
+  const highlights = [
+    "Salvage vehicle — professionally repaired",
+    "Sold below market value",
+    ...(car.motExpiry ? ["Valid MOT included"] : []),
+    "Repair details available on request",
+  ]
 
   const specs = [
     { icon: Gauge, label: "Mileage", value: `${car.mileage?.toLocaleString()} miles` },
@@ -81,10 +105,13 @@ export function CarDetailClient({ car }: CarDetailClientProps) {
           <div className="relative aspect-[16/10] bg-secondary">
             {images.length > 0 ? (
               <>
-                <img
+                <Image
                   src={images[currentImage]}
                   alt={`${car.year} ${car.make} ${car.model}`}
-                  className="w-full h-full object-cover"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 66vw"
+                  className="object-cover"
+                  priority
                 />
                 {images.length > 1 && (
                   <>
@@ -129,11 +156,17 @@ export function CarDetailClient({ car }: CarDetailClientProps) {
                 <button
                   key={idx}
                   onClick={() => setCurrentImage(idx)}
-                  className={`w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-colors ${
+                  className={`relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-colors ${
                     idx === currentImage ? "border-primary" : "border-transparent"
                   }`}
                 >
-                  <img src={img} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
+                  <Image
+                    src={img}
+                    alt={`Thumbnail ${idx + 1}`}
+                    fill
+                    sizes="80px"
+                    className="object-cover"
+                  />
                 </button>
               ))}
             </div>
@@ -213,33 +246,29 @@ export function CarDetailClient({ car }: CarDetailClientProps) {
             </div>
 
             <div className="space-y-3 mb-6 p-4 bg-secondary/50 rounded-lg">
-              <div className="flex items-center gap-2 text-sm text-foreground">
-                <CheckCircle className="h-4 w-4 text-primary" />
-                Salvage vehicle — professionally repaired
-              </div>
-              <div className="flex items-center gap-2 text-sm text-foreground">
-                <CheckCircle className="h-4 w-4 text-primary" />
-                Sold below market value
-              </div>
-              <div className="flex items-center gap-2 text-sm text-foreground">
-                <CheckCircle className="h-4 w-4 text-primary" />
-                Fresh MOT
-              </div>
-              <div className="flex items-center gap-2 text-sm text-foreground">
-                <CheckCircle className="h-4 w-4 text-primary" />
-                Repair details available on request
-              </div>
+              {highlights.map((item) => (
+                <div key={item} className="flex items-center gap-2 text-sm text-foreground">
+                  <CheckCircle className="h-4 w-4 text-primary shrink-0" />
+                  {item}
+                </div>
+              ))}
             </div>
 
             <div className="space-y-3">
               <Button className="w-full" size="lg" asChild>
-                <a href="tel:01212345678">
-                  <Phone className="h-4 w-4 mr-2" />
-                  Call Us: 0121 234 5678
+                <a
+                  href={whatsappUrl(
+                    `Hi, I'm interested in the ${car.year} ${car.make} ${car.model}.`
+                  )}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <MessageCircle className="h-4 w-4 mr-2" />
+                  Message on WhatsApp
                 </a>
               </Button>
               <Button variant="outline" className="w-full" size="lg" asChild>
-                <a href="mailto:info@salvageauto.co.uk">
+                <a href={`mailto:${COMPANY_EMAIL}`}>
                   <Mail className="h-4 w-4 mr-2" />
                   Email Us
                 </a>
@@ -251,7 +280,7 @@ export function CarDetailClient({ car }: CarDetailClientProps) {
         {/* Enquiry Form */}
         <Card className="bg-card border-border" id="enquire">
           <CardHeader>
-            <CardTitle className="text-foreground">Send an Enquiry</CardTitle>
+            <CardTitle className="text-foreground">Send an Enquiry via WhatsApp</CardTitle>
           </CardHeader>
           <CardContent>
             {enquirySubmitted ? (
@@ -259,34 +288,37 @@ export function CarDetailClient({ car }: CarDetailClientProps) {
                 <CheckCircle className="h-12 w-12 text-primary mx-auto mb-4" />
                 <h3 className="font-semibold text-foreground mb-2">Thank You!</h3>
                 <p className="text-muted-foreground text-sm">
-                  We&apos;ve received your enquiry and will be in touch soon.
+                  WhatsApp should have opened with your message. If it didn&apos;t, tap the WhatsApp
+                  button above.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleEnquirySubmit} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Your Name</Label>
-                  <Input id="name" required placeholder="John Smith" />
+                  <Input id="name" name="name" required placeholder="John Smith" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="phone">Phone Number</Label>
-                  <Input id="phone" type="tel" required placeholder="07123 456789" />
+                  <Input id="phone" name="phone" type="tel" required placeholder="07123 456789" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" required placeholder="john@example.com" />
+                  <Input id="email" name="email" type="email" required placeholder="john@example.com" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="message">Message</Label>
                   <Textarea
                     id="message"
+                    name="message"
                     rows={3}
                     placeholder="I'm interested in this vehicle..."
                     defaultValue={`Hi, I'm interested in the ${car.year} ${car.make} ${car.model}. Could you tell me more about the repairs carried out?`}
                   />
                 </div>
-                <Button type="submit" className="w-full">
-                  Send Enquiry
+                <Button type="submit" className="w-full gap-2">
+                  <MessageCircle className="h-4 w-4" />
+                  Send via WhatsApp
                 </Button>
               </form>
             )}

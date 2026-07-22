@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { authClient } from "@/lib/auth-client"
+import { Logo } from "@/components/logo"
 import {
   Car,
   LayoutDashboard,
@@ -43,18 +44,7 @@ function NavContent({
     <div className="flex flex-col h-full">
       {/* Logo */}
       <div className="px-5 py-5 border-b flex items-center justify-between" style={{ borderColor: "var(--border)" }}>
-        <div className="flex items-center gap-3">
-          <div
-            className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-            style={{ background: "linear-gradient(135deg, #f97316, #ea580c)" }}
-          >
-            <Car className="w-5 h-5 text-white" />
-          </div>
-          <div>
-            <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>LTY Cars</p>
-            <p className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>Admin Panel</p>
-          </div>
-        </div>
+        <Logo subtitle="Admin Panel" compact />
         {onClose && (
           <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-slate-100 lg:hidden" style={{ color: "var(--text-muted)" }}>
             <X className="w-4 h-4" />
@@ -164,13 +154,8 @@ export default function Sidebar({ userName, userEmail }: SidebarProps) {
         style={{ background: "#ffffff", borderColor: "var(--border)", boxShadow: "var(--shadow-sm)" }}
       >
         <div className="flex items-center gap-2.5">
-          <div
-            className="w-8 h-8 rounded-xl flex items-center justify-center"
-            style={{ background: "linear-gradient(135deg, #f97316, #ea580c)" }}
-          >
-            <Car className="w-4 h-4 text-white" />
-          </div>
-          <span className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>LTY Cars Admin</span>
+          <Logo compact showName={false} />
+          <span className="font-bold text-sm tracking-[0.15em]" style={{ color: "var(--text-primary)" }}>LTY Admin</span>
         </div>
         <button
           onClick={() => setMobileOpen(true)}

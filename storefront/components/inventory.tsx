@@ -5,7 +5,8 @@ import type { Car } from "@/lib/db/schema"
 import { CarCard } from "@/components/car-card"
 import { Filters, FilterState, defaultFilters } from "@/components/filters"
 import { Button } from "@/components/ui/button"
-import { Car as CarIcon, Phone } from "lucide-react"
+import { Car as CarIcon, MessageCircle } from "lucide-react"
+import { WHATSAPP_DISPLAY, WHATSAPP_URL } from "@/lib/contact"
 
 interface InventoryProps {
   cars: Car[]
@@ -57,7 +58,7 @@ export function Inventory({ cars }: InventoryProps) {
             Our Current Stock
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-pretty">
-            Salvage cars bought, repaired in our workshop, and priced below market value. New stock added as it becomes ready.
+            Browse workshop-repaired salvage cars below market value. New stock added as it becomes ready.
           </p>
         </div>
 
@@ -70,12 +71,12 @@ export function Inventory({ cars }: InventoryProps) {
             <CarIcon className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
             <p className="text-lg font-semibold text-foreground">No vehicles listed right now</p>
             <p className="text-muted-foreground mt-2">
-              We&apos;re always buying and repairing salvage cars. Call us to find out what&apos;s coming in next.
+              We&apos;re always buying and repairing salvage cars. Message us on WhatsApp to find out what&apos;s coming in next.
             </p>
             <Button className="mt-6 gap-2" asChild>
-              <a href="tel:01212345678">
-                <Phone className="h-4 w-4" />
-                Call: 0121 234 5678
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+                <MessageCircle className="h-4 w-4" />
+                WhatsApp: {WHATSAPP_DISPLAY}
               </a>
             </Button>
           </div>
