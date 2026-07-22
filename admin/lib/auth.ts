@@ -1,12 +1,15 @@
 import { betterAuth } from "better-auth"
 import { Pool } from "pg"
-import { ADMIN_SITE_URL, MAIN_SITE_URL, PRODUCTION_ORIGINS } from "@/lib/site"
+import { getGoogleClientId, getGoogleClientSecret, resolveAdminBaseUrl } from "@/lib/env"
+import { MAIN_SITE_URL, PRODUCTION_ORIGINS } from "@/lib/site"
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL })
 
+const baseURL = resolveAdminBaseUrl()
+
 const trustedOrigins = [
   ...PRODUCTION_ORIGINS,
-  process.env.BETTER_AUTH_URL,
+  baseURL,
   process.env.NEXT_PUBLIC_MAIN_SITE_URL,
   process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined,
   process.env.VERCEL_PROJECT_PRODUCTION_URL
@@ -16,7 +19,7 @@ const trustedOrigins = [
 
 export const auth = betterAuth({
   database: pool,
-  baseURL: process.env.BETTER_AUTH_URL || ADMIN_SITE_URL,
+  baseURL,
   secret: process.env.BETTER_AUTH_SECRET,
   trustedOrigins,
   emailAndPassword: {
@@ -24,8 +27,10 @@ export const auth = betterAuth({
   },
   socialProviders: {
     google: {
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      clientId: getGoogleClientId(),
+      clientSecret: getGoogleClientSecret(),
     },
   },
 })
+
+export { MAIN_SITE_URL }

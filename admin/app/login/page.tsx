@@ -36,10 +36,14 @@ export default function LoginPage() {
     setError("")
     setLoading(true)
     try {
-      await authClient.signIn.social({
+      const result = await authClient.signIn.social({
         provider: "google",
         callbackURL: "/dashboard",
       })
+      if (result.error) {
+        setError(result.error.message || "Failed to sign in with Google. Please try again.")
+        setLoading(false)
+      }
     } catch {
       setError("Failed to sign in with Google. Please try again.")
       setLoading(false)
