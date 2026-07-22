@@ -1,5 +1,7 @@
 import { betterAuth } from "better-auth"
+import { APIError, createAuthMiddleware } from "better-auth/api"
 import { Pool } from "pg"
+import { isAllowedAdminEmail } from "@/lib/admin-access"
 import { getGoogleClientId, getGoogleClientSecret, resolveAdminBaseUrl } from "@/lib/env"
 import { MAIN_SITE_URL, PRODUCTION_ORIGINS } from "@/lib/site"
 
@@ -17,6 +19,14 @@ const trustedOrigins = [
     : undefined,
 ].filter((origin, index, all) => Boolean(origin) && all.indexOf(origin) === index) as string[]
 
+function rejectUnauthorizedEmail(email: string | null | undefined): void {
+  if (!isAllowedAdminEmail(email)) {
+    throw new APIError("FORBIDDEN", {
+      message: "This Google account is not authorised for admin access.",
+    })
+  }
+}
+
 export const auth = betterAuth({
   database: pool,
   baseURL,
@@ -30,6 +40,26 @@ export const auth = betterAuth({
       clientId: getGoogleClientId(),
       clientSecret: getGoogleClientSecret(),
     },
+  },
+  databaseHooks: {
+    user: {
+      create: {
+        before: async (user) => {
+          rejectUnauthorizedEmail(user.email)
+          return { data: user }
+        },
+      },
+    },
+  },
+  hooks: {
+    after: createAuthMiddleware(async (ctx) => {
+      if (!ctx.path.endsWith("/callback/google")) return
+
+      const newSession = ctx.context.newSession
+      if (newSession) {
+        rejectUnauthorizedEmail(newSession.user.email)
+      }
+    }),
   },
 })
 

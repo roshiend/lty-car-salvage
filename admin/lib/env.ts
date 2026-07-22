@@ -26,3 +26,10 @@ export function getGoogleClientId(): string {
 export function getGoogleClientSecret(): string {
   return cleanEnv(process.env.GOOGLE_CLIENT_SECRET) ?? ""
 }
+
+export function resolveMainSiteUrl(): string {
+  const fromEnv = cleanEnv(process.env.NEXT_PUBLIC_MAIN_SITE_URL)
+  if (fromEnv && !fromEnv.includes(".vercel.app")) return fromEnv
+  if (process.env.NODE_ENV === "development") return "http://localhost:3000"
+  return "https://ltyway.co.uk"
+}

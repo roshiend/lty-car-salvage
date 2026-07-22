@@ -1,14 +1,8 @@
-export const ADMIN_SITE_URL =
-  process.env.NEXT_PUBLIC_BETTER_AUTH_URL ??
-  (process.env.NODE_ENV === "development"
-    ? "http://localhost:3001"
-    : "https://admin.ltyway.co.uk")
+import { resolveAdminBaseUrl, resolveMainSiteUrl } from "@/lib/env"
 
-export const MAIN_SITE_URL =
-  process.env.NEXT_PUBLIC_MAIN_SITE_URL ??
-  (process.env.NODE_ENV === "development"
-    ? "http://localhost:3000"
-    : "https://ltyway.co.uk")
+export const ADMIN_SITE_URL = resolveAdminBaseUrl()
+
+export const MAIN_SITE_URL = resolveMainSiteUrl()
 
 export const PRODUCTION_ORIGINS = [
   "https://admin.ltyway.co.uk",

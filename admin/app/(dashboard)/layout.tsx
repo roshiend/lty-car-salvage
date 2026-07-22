@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import { headers } from "next/headers"
 import { auth } from "@/lib/auth"
+import { isAllowedAdminEmail } from "@/lib/admin-access"
 import Sidebar from "@/components/sidebar"
 
 export default async function DashboardLayout({
@@ -9,7 +10,9 @@ export default async function DashboardLayout({
   children: React.ReactNode
 }) {
   const session = await auth.api.getSession({ headers: await headers() })
-  if (!session?.user) redirect("/login")
+  if (!session?.user || !isAllowedAdminEmail(session.user.email)) {
+    redirect("/login?error=unauthorized")
+  }
 
   return (
     <div className="min-h-screen" style={{ background: "var(--background)" }}>
