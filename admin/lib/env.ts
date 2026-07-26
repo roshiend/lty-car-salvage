@@ -46,6 +46,11 @@ export function getCloudinaryApiSecret(): string {
   return cleanSecretEnv(process.env.CLOUDINARY_API_SECRET) ?? ""
 }
 
+/** Optional single-line config: cloudinary://API_KEY:API_SECRET@CLOUD_NAME */
+export function getCloudinaryUrl(): string {
+  return cleanSecretEnv(process.env.CLOUDINARY_URL) ?? ""
+}
+
 export function resolveMainSiteUrl(): string {
   const fromEnv = cleanEnv(process.env.NEXT_PUBLIC_MAIN_SITE_URL)
   if (fromEnv && !fromEnv.includes(".vercel.app")) return fromEnv

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { headers } from "next/headers"
 import { auth } from "@/lib/auth"
-import { configureCloudinary, formatUploadError, uploadImageBuffer } from "@/lib/cloudinary"
+import { configureCloudinary, formatUploadError, uploadImageBuffer, validateCloudinaryCredentials } from "@/lib/cloudinary"
 
 const ALLOWED_TYPES = new Set([
   "image/jpeg",
@@ -30,10 +30,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           error:
-            "Cloudinary is not configured. Add CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET to admin/.env.local (local) or Vercel env (production), then restart or redeploy.",
+            "Cloudinary is not configured. Add CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET to the admin Vercel project, then redeploy.",
         },
         { status: 503 }
       )
+    }
+
+    const credentialError = validateCloudinaryCredentials()
+    if (credentialError) {
+      return NextResponse.json({ error: credentialError }, { status: 503 })
     }
 
     const formData = await request.formData()

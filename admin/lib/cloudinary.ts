@@ -4,12 +4,47 @@ import {
   getCloudinaryApiKey,
   getCloudinaryApiSecret,
   getCloudinaryCloudName,
+  getCloudinaryUrl,
 } from "@/lib/env"
 
 export const CLOUDINARY_FOLDER =
   process.env.CLOUDINARY_FOLDER?.trim() || "lty-cars"
 
+/** Catch swapped/truncated credentials before calling Cloudinary. */
+export function validateCloudinaryCredentials(): string | null {
+  if (getCloudinaryUrl().startsWith("cloudinary://")) {
+    return null
+  }
+
+  const cloud_name = getCloudinaryCloudName()
+  const api_key = getCloudinaryApiKey()
+  const api_secret = getCloudinaryApiSecret()
+
+  if (!cloud_name || !api_key || !api_secret) {
+    return null
+  }
+
+  const keyIsNumeric = /^\d+$/.test(api_key)
+  const secretIsNumeric = /^\d+$/.test(api_secret)
+
+  if (!keyIsNumeric && secretIsNumeric) {
+    return "CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET look swapped. Key = number only; Secret = longer string from Access keys."
+  }
+
+  if (keyIsNumeric && api_secret.length < 20) {
+    return "CLOUDINARY_API_SECRET looks too short — paste the full API secret from Cloudinary."
+  }
+
+  return null
+}
+
 export function configureCloudinary(): boolean {
+  const cloudinaryUrl = getCloudinaryUrl()
+  if (cloudinaryUrl.startsWith("cloudinary://")) {
+    cloudinary.config({ cloudinary_url: cloudinaryUrl, secure: true })
+    return true
+  }
+
   const cloud_name = getCloudinaryCloudName()
   const api_key = getCloudinaryApiKey()
   const api_secret = getCloudinaryApiSecret()
@@ -41,12 +76,21 @@ export function uploadImageBuffer(buffer: Buffer): Promise<UploadApiResponse> {
 }
 
 export function formatUploadError(error: unknown): string {
+  let msg = "Upload failed"
   if (error && typeof error === "object") {
     const e = error as { message?: string; error?: { message?: string } }
-    if (e.message) return e.message
-    if (e.error?.message) return e.error.message
+    msg = e.message || e.error?.message || msg
   }
-  return "Upload failed"
+
+  if (msg.includes("Invalid Signature")) {
+    return (
+      "Invalid Cloudinary credentials (signature mismatch). In Vercel → admin project: open Cloudinary Dashboard → Settings → Access keys. " +
+      "Set CLOUDINARY_CLOUD_NAME = cloud name, CLOUDINARY_API_KEY = the numeric Key, CLOUDINARY_API_SECRET = the Secret (not the key). " +
+      "If unsure, click Reset secret, paste all three fresh, redeploy admin. Remove any extra CLOUDINARY_URL unless you built it as cloudinary://KEY:SECRET@CLOUD_NAME."
+    )
+  }
+
+  return msg
 }
 
 export { cloudinary }
