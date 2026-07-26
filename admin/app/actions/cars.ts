@@ -6,6 +6,7 @@ import { eq } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { revalidateStorefront } from "@/lib/revalidate-storefront"
+import { normalizeImageUrls } from "@/lib/image-url"
 
 export async function createCar(formData: FormData) {
   const status = (formData.get("status") as string) || "available"
@@ -26,7 +27,7 @@ export async function createCar(formData: FormData) {
     description: (formData.get("description") as string) || null,
     registration: (formData.get("registration") as string) || null,
     motExpiry: (formData.get("motExpiry") as string) || null,
-    images: JSON.parse((formData.get("images") as string) || "[]"),
+    images: normalizeImageUrls(JSON.parse((formData.get("images") as string) || "[]")),
     features: (formData.get("features") as string)
       ?.split("\n")
       .map((f) => f.trim())
@@ -62,7 +63,7 @@ export async function updateCar(id: number, formData: FormData) {
     description: (formData.get("description") as string) || null,
     registration: (formData.get("registration") as string) || null,
     motExpiry: (formData.get("motExpiry") as string) || null,
-    images: JSON.parse((formData.get("images") as string) || "[]"),
+    images: normalizeImageUrls(JSON.parse((formData.get("images") as string) || "[]")),
     features: (formData.get("features") as string)
       ?.split("\n")
       .map((f) => f.trim())

@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -8,6 +7,8 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Gauge, Eye, TrendingDown, Car as CarIcon, Fuel, Settings2 } from "lucide-react"
 import type { Car } from "@/lib/db/schema"
 import { stockStatusLabel } from "@/lib/car-status"
+import { CarPhoto } from "@/components/car-photo"
+import { normalizeImageUrl } from "@/lib/image-url"
 
 interface CarCardProps {
   car: Car
@@ -35,8 +36,8 @@ export function CarCard({ car, compact }: CarCardProps) {
         className={`relative overflow-hidden bg-secondary ${compact ? "aspect-[2/1]" : "aspect-[4/3]"}`}
       >
         {car.images && car.images.length > 0 ? (
-          <Image
-            src={car.images[0]}
+          <CarPhoto
+            src={normalizeImageUrl(car.images[0])}
             alt={`${car.year} ${car.make} ${car.model}`}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState } from "react"
 import { Car } from "@/lib/db/schema"
+import { normalizeImageUrl } from "@/lib/image-url"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -14,7 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { X, Upload, Loader2, Trash2 } from "lucide-react"
+import { X, Loader2, Trash2, Plus } from "lucide-react"
 import { createCar, updateCar } from "@/app/actions/cars"
 
 interface CarFormProps {
@@ -35,9 +36,8 @@ const categories = ["Cat S", "Cat N", "Repaired"]
 
 export function CarForm({ car, onClose }: CarFormProps) {
   const [loading, setLoading] = useState(false)
-  const [uploading, setUploading] = useState(false)
   const [images, setImages] = useState<string[]>(car?.images || [])
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [imageUrl, setImageUrl] = useState("")
   
   const [formData, setFormData] = useState({
     make: car?.make || "",
@@ -61,47 +61,19 @@ export function CarForm({ car, onClose }: CarFormProps) {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files
-    if (!files || files.length === 0) return
-
-    setUploading(true)
+  const addImageUrl = () => {
+    const url = imageUrl.trim()
+    if (!url) return
     try {
-      for (const file of Array.from(files)) {
-        const formData = new FormData()
-        formData.append("file", file)
-
-        const response = await fetch("/api/upload", {
-          method: "POST",
-          body: formData,
-        })
-
-        if (response.ok) {
-          const { url } = await response.json()
-          setImages((prev) => [...prev, url])
-        }
-      }
-    } catch (error) {
-      console.error("Upload failed:", error)
-    } finally {
-      setUploading(false)
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ""
-      }
+      new URL(url)
+    } catch {
+      return
     }
+    setImages((prev) => [...prev, normalizeImageUrl(url)])
+    setImageUrl("")
   }
 
-  const handleRemoveImage = async (index: number) => {
-    const imageUrl = images[index]
-    try {
-      await fetch("/api/upload", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: imageUrl }),
-      })
-    } catch (error) {
-      console.error("Failed to delete image:", error)
-    }
+  const handleRemoveImage = (index: number) => {
     setImages((prev) => prev.filter((_, i) => i !== index))
   }
 
@@ -158,10 +130,14 @@ export function CarForm({ car, onClose }: CarFormProps) {
           {/* Images */}
           <div className="space-y-2">
             <Label className="text-foreground">Images</Label>
+            <p className="text-xs text-muted-foreground">
+              Paste Google Drive share links (Anyone with the link). Prefer{" "}
+              <strong>admin.ltyway.co.uk</strong> for inventory.
+            </p>
             <div className="flex flex-wrap gap-3">
               {images.map((img, index) => (
                 <div key={index} className="relative w-24 h-24 rounded-lg overflow-hidden border border-border">
-                  <img src={img} alt={`Car ${index + 1}`} className="w-full h-full object-cover" />
+                  <img src={img} alt={`Car ${index + 1}`} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                   <button
                     type="button"
                     onClick={() => handleRemoveImage(index)}
@@ -171,25 +147,18 @@ export function CarForm({ car, onClose }: CarFormProps) {
                   </button>
                 </div>
               ))}
-              <label className="w-24 h-24 border-2 border-dashed border-border rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-primary transition-colors">
-                {uploading ? (
-                  <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-                ) : (
-                  <>
-                    <Upload className="h-6 w-6 text-muted-foreground" />
-                    <span className="text-xs text-muted-foreground mt-1">Upload</span>
-                  </>
-                )}
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  className="hidden"
-                  onChange={handleImageUpload}
-                  disabled={uploading}
-                />
-              </label>
+            </div>
+            <div className="flex gap-2">
+              <Input
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)}
+                placeholder="https://drive.google.com/file/d/…/view"
+                className="bg-input border-border"
+              />
+              <Button type="button" variant="outline" onClick={addImageUrl}>
+                <Plus className="h-4 w-4 mr-1" />
+                Add
+              </Button>
             </div>
           </div>
 
