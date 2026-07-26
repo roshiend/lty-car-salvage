@@ -199,13 +199,13 @@ ${message}`
           </CardHeader>
           <CardContent className="space-y-4">
             <div
-              className="rounded-lg border-2 border-amber-500/80 bg-amber-50 dark:bg-amber-950/40 p-4"
+              className="rounded-lg border border-border bg-card p-4"
               role="note"
               aria-label="Important buyer information"
             >
               <div className="flex items-center gap-2 mb-3">
-                <AlertTriangle className="h-5 w-5 text-amber-700 dark:text-amber-400 shrink-0" aria-hidden />
-                <p className="font-semibold text-amber-950 dark:text-amber-100 text-sm">
+                <AlertTriangle className="h-5 w-5 text-white shrink-0" aria-hidden />
+                <p className="font-semibold text-white text-sm">
                   Important — please read before you buy
                 </p>
               </div>
@@ -215,8 +215,8 @@ ${message}`
                   "Not HPI clear",
                   "Previously salvaged vehicle",
                 ].map((line) => (
-                  <li key={line} className="flex items-start gap-2 text-sm font-medium text-amber-950 dark:text-amber-50">
-                    <span className="text-amber-600 dark:text-amber-400 font-bold shrink-0" aria-hidden>
+                  <li key={line} className="flex items-start gap-2 text-sm font-medium text-white">
+                    <span className="text-white font-bold shrink-0" aria-hidden>
                       !
                     </span>
                     <span>{line}</span>
