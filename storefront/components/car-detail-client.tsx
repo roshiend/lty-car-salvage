@@ -204,8 +204,8 @@ ${message}`
               aria-label="Important buyer information"
             >
               <div className="flex items-center gap-2 mb-3">
-                <AlertTriangle className="h-5 w-5 text-white shrink-0" aria-hidden />
-                <p className="font-semibold text-white text-sm">
+                <AlertTriangle className="h-5 w-5 text-orange-500 shrink-0" aria-hidden />
+                <p className="font-semibold text-orange-500 text-sm">
                   Important — please read before you buy
                 </p>
               </div>
@@ -215,8 +215,8 @@ ${message}`
                   "Not HPI clear",
                   "Previously salvaged vehicle",
                 ].map((line) => (
-                  <li key={line} className="flex items-start gap-2 text-sm font-medium text-white">
-                    <span className="text-white font-bold shrink-0" aria-hidden>
+                  <li key={line} className="flex items-start gap-2 text-sm font-medium text-orange-500">
+                    <span className="text-orange-500 font-bold shrink-0" aria-hidden>
                       !
                     </span>
                     <span>{line}</span>
@@ -225,7 +225,7 @@ ${message}`
               </ul>
             </div>
             {car.description ? (
-              <p className="text-muted-foreground whitespace-pre-line pt-2 border-t border-border">
+              <p className="text-sm font-semibold text-orange-500 whitespace-pre-line pt-2 border-t border-border">
                 {car.description}
               </p>
             ) : null}
