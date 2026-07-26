@@ -76,11 +76,9 @@ ${message}`
     setEnquirySubmitted(true)
   }
 
-  const highlights = [
-    "Salvage vehicle — professionally repaired",
-    "Sold below market value",
-    ...(car.motExpiry ? ["Valid MOT included"] : []),
-    `${car.category} — salvage category shown`,
+  const priceHighlights = [
+    ...(car.motExpiry ? ["Valid MOT until " + new Date(car.motExpiry).toLocaleDateString("en-GB")] : []),
+    `${car.category} category — details in specifications`,
   ]
 
   const specs = [
@@ -235,122 +233,102 @@ ${message}`
         </Card>
       </div>
 
-      {/* Right Column - Pricing & Enquiry (sticky together on desktop) */}
-      <div className="space-y-6 lg:sticky lg:top-4 lg:self-start">
-        {/* Pricing Card */}
-        <Card className="bg-card border-border">
-          <CardContent className="p-6">
-            <div className="mb-4">
-              <div className="flex items-center gap-2 mb-2">
-                <Badge className={categoryColor[car.category as keyof typeof categoryColor] || "bg-secondary"}>
-                  {car.category}
-                </Badge>
-              </div>
-              <h1 className="text-2xl font-bold text-foreground">
-                {car.year} {car.make} {car.model}
-              </h1>
-            </div>
-
-            <div className="mb-6">
-              <div className="flex items-baseline gap-3 mb-2">
-                <span className="text-4xl font-bold text-primary">
-                  £{price.toLocaleString()}
-                </span>
-              </div>
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <span className="line-through">
-                  Market Value: £{marketValue.toLocaleString()}
-                </span>
-              </div>
-              <Badge
-                variant="secondary"
-                className="mt-2 bg-primary/10 text-primary border-primary/20"
-              >
-                <TrendingDown className="h-3 w-3 mr-1" />
-                You save £{savings.toLocaleString()} ({savingsPercent}%)
+      {/* Right Column — single sticky pricing & enquiry card */}
+      <Card className="bg-card border-border lg:sticky lg:top-4 lg:self-start" id="enquire">
+        <CardContent className="p-6 space-y-6">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <Badge className={categoryColor[car.category as keyof typeof categoryColor] || "bg-secondary"}>
+                {car.category}
               </Badge>
             </div>
+            <h1 className="text-2xl font-bold text-foreground">
+              {car.year} {car.make} {car.model}
+            </h1>
+          </div>
 
-            <div className="space-y-3 mb-6 p-4 bg-secondary/50 rounded-lg">
-              {highlights.map((item) => (
+          <div>
+            <div className="flex items-baseline gap-3 mb-2">
+              <span className="text-4xl font-bold text-primary">£{price.toLocaleString()}</span>
+            </div>
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <span className="line-through">Market Value: £{marketValue.toLocaleString()}</span>
+            </div>
+            <Badge
+              variant="secondary"
+              className="mt-2 bg-primary/10 text-primary border-primary/20"
+            >
+              <TrendingDown className="h-3 w-3 mr-1" />
+              You save £{savings.toLocaleString()} ({savingsPercent}%)
+            </Badge>
+          </div>
+
+          {priceHighlights.length > 0 ? (
+            <div className="space-y-2 p-4 bg-secondary/50 rounded-lg">
+              {priceHighlights.map((item) => (
                 <div key={item} className="flex items-center gap-2 text-sm text-foreground">
                   <CheckCircle className="h-4 w-4 text-primary shrink-0" />
                   {item}
                 </div>
               ))}
             </div>
+          ) : null}
 
-            <div className="space-y-3">
-              <Button className="w-full" size="lg" asChild>
-                <a
-                  href={whatsappUrl(
-                    `Hi, I'm interested in the ${car.year} ${car.make} ${car.model}.`
-                  )}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <MessageCircle className="h-4 w-4 mr-2" />
-                  Message on WhatsApp
+          {enquirySubmitted ? (
+            <div className="text-center py-4 border-t border-border pt-6">
+              <CheckCircle className="h-12 w-12 text-primary mx-auto mb-4" />
+              <h3 className="font-semibold text-foreground mb-2">Thank you</h3>
+              <p className="text-muted-foreground text-sm">
+                WhatsApp should have opened with your message. You can also email us at{" "}
+                <a href={`mailto:${COMPANY_EMAIL}`} className="text-primary underline">
+                  {COMPANY_EMAIL}
                 </a>
-              </Button>
-              <Button variant="outline" className="w-full" size="lg" asChild>
-                <a href={`mailto:${COMPANY_EMAIL}`}>
-                  <Mail className="h-4 w-4 mr-2" />
-                  Email Us
-                </a>
-              </Button>
+                .
+              </p>
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Enquiry Form */}
-        <Card className="bg-card border-border" id="enquire">
-          <CardHeader>
-            <CardTitle className="text-foreground">Send an Enquiry via WhatsApp</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {enquirySubmitted ? (
-              <div className="text-center py-6">
-                <CheckCircle className="h-12 w-12 text-primary mx-auto mb-4" />
-                <h3 className="font-semibold text-foreground mb-2">Thank You!</h3>
-                <p className="text-muted-foreground text-sm">
-                  WhatsApp should have opened with your message. If it didn&apos;t, tap the WhatsApp
-                  button above.
+          ) : (
+            <form onSubmit={handleEnquirySubmit} className="space-y-4 border-t border-border pt-6">
+              <div>
+                <h2 className="text-lg font-semibold text-foreground">Enquire about this vehicle</h2>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Send your details via WhatsApp or email us below.
                 </p>
               </div>
-            ) : (
-              <form onSubmit={handleEnquirySubmit} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Your Name</Label>
-                  <Input id="name" name="name" required placeholder="John Smith" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="phone">Phone Number</Label>
-                  <Input id="phone" name="phone" type="tel" required placeholder="07123 456789" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input id="email" name="email" type="email" required placeholder="john@example.com" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="message">Message</Label>
-                  <Textarea
-                    id="message"
-                    name="message"
-                    rows={3}
-                    placeholder="I'm interested in this vehicle..."
-                    defaultValue={`Hi, I'm interested in the ${car.year} ${car.make} ${car.model}.`}
-                  />
-                </div>
-                <Button type="submit" className="w-full gap-2">
-                  <MessageCircle className="h-4 w-4" />
-                  Send via WhatsApp
-                </Button>
-              </form>
-            )}
-          </CardContent>
-        </Card>
-      </div>
+              <div className="space-y-2">
+                <Label htmlFor="name">Your Name</Label>
+                <Input id="name" name="name" required placeholder="John Smith" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="phone">Phone Number</Label>
+                <Input id="phone" name="phone" type="tel" required placeholder="07123 456789" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" name="email" type="email" required placeholder="john@example.com" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="message">Message</Label>
+                <Textarea
+                  id="message"
+                  name="message"
+                  rows={3}
+                  placeholder="Any questions about this car?"
+                />
+              </div>
+              <Button type="submit" className="w-full gap-2" size="lg">
+                <MessageCircle className="h-4 w-4" />
+                Send enquiry on WhatsApp
+              </Button>
+              <Button variant="outline" className="w-full" size="lg" asChild>
+                <a href={`mailto:${COMPANY_EMAIL}?subject=${encodeURIComponent(`Enquiry: ${car.year} ${car.make} ${car.model}`)}`}>
+                  <Mail className="h-4 w-4 mr-2" />
+                  Email instead
+                </a>
+              </Button>
+            </form>
+          )}
+        </CardContent>
+      </Card>
     </div>
   )
 }
