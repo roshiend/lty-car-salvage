@@ -64,6 +64,7 @@ function Card({ title, children, noPad }: { title?: string; children: React.Reac
 
 export default function CarForm({ car }: CarFormProps) {
   const [loading, setLoading] = useState(false)
+  const [photosUploading, setPhotosUploading] = useState(false)
   const [saveError, setSaveError] = useState("")
   const [selectedStatus, setSelectedStatus] = useState(car?.status ?? "available")
   const [images, setImages] = useState<string[]>(car?.images || [])
@@ -82,6 +83,10 @@ export default function CarForm({ car }: CarFormProps) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setSaveError("")
+    if (photosUploading) {
+      setSaveError("Wait for Cloudinary uploads to finish before saving.")
+      return
+    }
     setLoading(true)
     const fd = new FormData(e.currentTarget)
     fd.set("images", JSON.stringify(images))
@@ -204,10 +209,10 @@ export default function CarForm({ car }: CarFormProps) {
 
           {/* Media */}
           <Card title="Media">
-            <ImageUploader images={images} onChange={setImages} />
-            {images.length === 0 && (
+            <ImageUploader images={images} onChange={setImages} onUploadingChange={setPhotosUploading} />
+            {images.length === 0 && !photosUploading && (
               <p className="text-xs mt-2" style={{ color: "#64748b" }}>
-                Paste Google Drive share links, then click Save.
+                Upload photos above (Cloudinary), then click Save.
               </p>
             )}
           </Card>

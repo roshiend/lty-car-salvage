@@ -1,9 +1,8 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState } from "react"
 import type { Car } from "@/lib/db/schema"
 import { CarPhoto } from "@/components/car-photo"
-import { normalizeImageUrl } from "@/lib/image-url"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -36,10 +35,7 @@ export function CarDetailClient({ car }: CarDetailClientProps) {
   const [currentImage, setCurrentImage] = useState(0)
   const [enquirySubmitted, setEnquirySubmitted] = useState(false)
 
-  const images = useMemo(
-    () => (car.images && car.images.length > 0 ? car.images.map(normalizeImageUrl) : []),
-    [car.images]
-  )
+  const images = car.images && car.images.length > 0 ? car.images : []
   const price = Number(car.price)
   const marketValue = Number(car.marketValue)
   const savings = marketValue - price

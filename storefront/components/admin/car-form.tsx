@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { Car } from "@/lib/db/schema"
-import { normalizeImageUrl } from "@/lib/image-url"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -15,7 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { X, Loader2, Trash2, Plus } from "lucide-react"
+import { X, Loader2, Trash2 } from "lucide-react"
 import { createCar, updateCar } from "@/app/actions/cars"
 
 interface CarFormProps {
@@ -37,7 +36,6 @@ const categories = ["Cat S", "Cat N", "Repaired"]
 export function CarForm({ car, onClose }: CarFormProps) {
   const [loading, setLoading] = useState(false)
   const [images, setImages] = useState<string[]>(car?.images || [])
-  const [imageUrl, setImageUrl] = useState("")
   
   const [formData, setFormData] = useState({
     make: car?.make || "",
@@ -59,18 +57,6 @@ export function CarForm({ car, onClose }: CarFormProps) {
 
   const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
-  }
-
-  const addImageUrl = () => {
-    const url = imageUrl.trim()
-    if (!url) return
-    try {
-      new URL(url)
-    } catch {
-      return
-    }
-    setImages((prev) => [...prev, normalizeImageUrl(url)])
-    setImageUrl("")
   }
 
   const handleRemoveImage = (index: number) => {
@@ -131,13 +117,13 @@ export function CarForm({ car, onClose }: CarFormProps) {
           <div className="space-y-2">
             <Label className="text-foreground">Images</Label>
             <p className="text-xs text-muted-foreground">
-              Paste Google Drive share links (Anyone with the link). Prefer{" "}
-              <strong>admin.ltyway.co.uk</strong> for inventory.
+              Upload photos at <strong>admin.ltyway.co.uk</strong> (Cloudinary). Existing images below can be
+              removed only — add new ones in the admin panel.
             </p>
             <div className="flex flex-wrap gap-3">
               {images.map((img, index) => (
                 <div key={index} className="relative w-24 h-24 rounded-lg overflow-hidden border border-border">
-                  <img src={img} alt={`Car ${index + 1}`} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  <img src={img} alt={`Car ${index + 1}`} className="w-full h-full object-cover" />
                   <button
                     type="button"
                     onClick={() => handleRemoveImage(index)}
@@ -147,18 +133,9 @@ export function CarForm({ car, onClose }: CarFormProps) {
                   </button>
                 </div>
               ))}
-            </div>
-            <div className="flex gap-2">
-              <Input
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                placeholder="https://drive.google.com/file/d/…/view"
-                className="bg-input border-border"
-              />
-              <Button type="button" variant="outline" onClick={addImageUrl}>
-                <Plus className="h-4 w-4 mr-1" />
-                Add
-              </Button>
+              {images.length === 0 && (
+                <p className="text-sm text-muted-foreground">No images — use the admin site to upload.</p>
+              )}
             </div>
           </div>
 

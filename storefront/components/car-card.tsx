@@ -8,7 +8,6 @@ import { Gauge, Eye, TrendingDown, Car as CarIcon, Fuel, Settings2 } from "lucid
 import type { Car } from "@/lib/db/schema"
 import { stockStatusLabel } from "@/lib/car-status"
 import { CarPhoto } from "@/components/car-photo"
-import { normalizeImageUrl } from "@/lib/image-url"
 
 interface CarCardProps {
   car: Car
@@ -37,7 +36,7 @@ export function CarCard({ car, compact }: CarCardProps) {
       >
         {car.images && car.images.length > 0 ? (
           <CarPhoto
-            src={normalizeImageUrl(car.images[0])}
+            src={car.images[0]}
             alt={`${car.year} ${car.make} ${car.model}`}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

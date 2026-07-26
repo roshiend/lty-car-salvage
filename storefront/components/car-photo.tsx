@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { isGoogleDriveImageUrl, normalizeImageUrl } from "@/lib/image-url"
+import { useNativeImageTag } from "@/lib/image-url"
 
 interface CarPhotoProps {
   src: string
@@ -10,16 +10,14 @@ interface CarPhotoProps {
   priority?: boolean
 }
 
-/** Renders car photos; Google Drive uses a plain img tag (Next image optimizer cannot fetch Drive). */
 export function CarPhoto({ src, alt, className = "", fill, sizes, priority }: CarPhotoProps) {
-  const normalized = normalizeImageUrl(src)
-  const drive = isGoogleDriveImageUrl(normalized)
+  const trimmed = src.trim()
 
-  if (drive) {
+  if (useNativeImageTag(trimmed)) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
-        src={normalized}
+        src={trimmed}
         alt={alt}
         referrerPolicy="no-referrer"
         className={`${fill ? "absolute inset-0 h-full w-full object-cover " : ""}${className}`}
@@ -29,7 +27,7 @@ export function CarPhoto({ src, alt, className = "", fill, sizes, priority }: Ca
 
   return (
     <Image
-      src={normalized}
+      src={trimmed}
       alt={alt}
       fill={fill}
       sizes={sizes}
