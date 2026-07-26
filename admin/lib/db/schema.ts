@@ -7,6 +7,7 @@ import {
   text,
   timestamp,
   date,
+  uuid,
 } from "drizzle-orm/pg-core"
 
 export const user = pgTable("user", {
@@ -61,6 +62,7 @@ export const verification = pgTable("verification", {
 
 export const cars = pgTable("cars", {
   id: serial("id").primaryKey(),
+  publicId: uuid("public_id").notNull().unique().defaultRandom(),
   make: text("make").notNull(),
   model: text("model").notNull(),
   year: integer("year").notNull(),

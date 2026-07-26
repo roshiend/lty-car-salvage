@@ -7,6 +7,7 @@ import {
   text,
   timestamp,
   date,
+  uuid,
 } from "drizzle-orm/pg-core"
 
 // Better Auth tables
@@ -63,6 +64,7 @@ export const verification = pgTable("verification", {
 // Cars table
 export const cars = pgTable("cars", {
   id: serial("id").primaryKey(),
+  publicId: uuid("public_id").notNull().unique().defaultRandom(),
   make: text("make").notNull(),
   model: text("model").notNull(),
   year: integer("year").notNull(),

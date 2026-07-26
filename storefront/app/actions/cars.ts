@@ -31,7 +31,22 @@ export async function getCars(includeAll = false) {
   }
 }
 
-export async function getCarById(id: number) {
+export async function getCarByPublicId(publicId: string) {
+  if (!process.env.DATABASE_URL) return null
+
+  try {
+    const result = await db.select().from(cars).where(eq(cars.publicId, publicId))
+    const car = result[0] || null
+    if (!car || car.isDummy) return null
+    return car
+  } catch (error) {
+    console.error("Failed to fetch car:", error)
+    return null
+  }
+}
+
+/** Legacy numeric URLs only — used for permanent redirect to publicId. */
+export async function getCarByInternalId(id: number) {
   if (!process.env.DATABASE_URL) return null
 
   try {
@@ -43,6 +58,11 @@ export async function getCarById(id: number) {
     console.error("Failed to fetch car:", error)
     return null
   }
+}
+
+/** @deprecated Use getCarByPublicId for storefront routes */
+export async function getCarById(id: number) {
+  return getCarByInternalId(id)
 }
 
 export async function createCar(data: {
@@ -118,7 +138,9 @@ export async function updateCar(
 
   revalidatePath("/")
   revalidatePath("/admin")
-  revalidatePath(`/cars/${id}`)
+  if (result[0]?.publicId) {
+    revalidatePath(`/cars/${result[0].publicId}`)
+  }
   return result[0]
 }
 

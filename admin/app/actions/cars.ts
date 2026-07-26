@@ -8,6 +8,15 @@ import { redirect } from "next/navigation"
 import { revalidateStorefront } from "@/lib/revalidate-storefront"
 import { normalizeImageUrls } from "@/lib/image-url"
 
+async function publicIdForCar(id: number): Promise<string | undefined> {
+  const rows = await db
+    .select({ publicId: cars.publicId })
+    .from(cars)
+    .where(eq(cars.id, id))
+    .limit(1)
+  return rows[0]?.publicId
+}
+
 export async function createCar(formData: FormData) {
   const status = (formData.get("status") as string) || "available"
   const data = {
@@ -37,10 +46,10 @@ export async function createCar(formData: FormData) {
     isDummy: false,
   }
 
-  const inserted = await db.insert(cars).values(data).returning({ id: cars.id })
+  const inserted = await db.insert(cars).values(data).returning({ publicId: cars.publicId })
   revalidatePath("/cars")
   revalidatePath("/dashboard")
-  await revalidateStorefront(inserted[0]?.id)
+  await revalidateStorefront(inserted[0]?.publicId)
   redirect("/cars")
 }
 
@@ -76,15 +85,16 @@ export async function updateCar(id: number, formData: FormData) {
   await db.update(cars).set(data).where(eq(cars.id, id))
   revalidatePath("/cars")
   revalidatePath("/dashboard")
-  await revalidateStorefront(id)
+  await revalidateStorefront(await publicIdForCar(id))
   redirect("/cars")
 }
 
 export async function deleteCar(id: number) {
+  const publicId = await publicIdForCar(id)
   await db.delete(cars).where(eq(cars.id, id))
   revalidatePath("/cars")
   revalidatePath("/dashboard")
-  await revalidateStorefront()
+  await revalidateStorefront(publicId)
 }
 
 export async function deleteAllDummyCars() {
@@ -101,12 +111,12 @@ export async function updateCarStatus(id: number, status: string) {
     .where(eq(cars.id, id))
   revalidatePath("/cars")
   revalidatePath("/dashboard")
-  await revalidateStorefront(id)
+  await revalidateStorefront(await publicIdForCar(id))
 }
 
 export async function toggleSold(id: number, isSold: boolean) {
   await db.update(cars).set({ isSold, updatedAt: new Date() }).where(eq(cars.id, id))
   revalidatePath("/cars")
   revalidatePath("/dashboard")
-  await revalidateStorefront(id)
+  await revalidateStorefront(await publicIdForCar(id))
 }

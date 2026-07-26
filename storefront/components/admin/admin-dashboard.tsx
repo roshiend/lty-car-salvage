@@ -12,6 +12,7 @@ import { CarForm } from "./car-form"
 import { deleteCar, toggleCarSold } from "@/app/actions/cars"
 import Link from "next/link"
 import { Logo } from "@/components/logo"
+import { carPublicPath } from "@/lib/car-url"
 
 interface AdminDashboardProps {
   cars: Car[]
@@ -252,7 +253,7 @@ export function AdminDashboard({ cars, userName }: AdminDashboardProps) {
                           Edit
                         </Button>
                         <Button size="sm" variant="outline" asChild>
-                          <Link href={`/cars/${car.id}`} target="_blank">
+                          <Link href={carPublicPath(car)} target="_blank">
                             <Eye className="h-4 w-4 mr-1" />
                             View
                           </Link>

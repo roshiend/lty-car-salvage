@@ -1,12 +1,12 @@
 import { resolveMainSiteUrl } from "@/lib/env"
 
 /** Ask the main site (separate Vercel project) to refresh cached pages after inventory changes. */
-export async function revalidateStorefront(carId?: number): Promise<void> {
+export async function revalidateStorefront(carPublicId?: string): Promise<void> {
   const secret = process.env.STOREFRONT_REVALIDATE_SECRET?.trim()
   if (!secret) return
 
   const base = resolveMainSiteUrl().replace(/\/$/, "")
-  const paths = ["/", ...(carId != null ? [`/cars/${carId}`] : [])]
+  const paths = ["/", ...(carPublicId ? [`/cars/${carPublicId}`] : [])]
 
   try {
     await fetch(`${base}/api/revalidate`, {

@@ -3,6 +3,7 @@ import { cars } from "@/lib/db/schema"
 import { desc } from "drizzle-orm"
 import Link from "next/link"
 import { MAIN_SITE_URL } from "@/lib/site"
+import { carPublicPath } from "@/lib/car-url"
 import { Car, Plus, Pencil, ExternalLink } from "lucide-react"
 import DeleteCarButton from "@/components/delete-car-button"
 import DeleteAllDummyButton from "@/components/delete-all-dummy-button"
@@ -202,7 +203,7 @@ export default async function CarsPage() {
                         </Link>
                         {!car.isDummy && (
                           <a
-                            href={`${MAIN_SITE_URL}/cars/${car.id}`}
+                            href={`${MAIN_SITE_URL}${carPublicPath(car)}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="p-2 rounded-lg border transition-all hover:bg-slate-50"

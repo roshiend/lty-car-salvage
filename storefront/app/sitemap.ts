@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next"
 import { getCars } from "@/app/actions/cars"
 import { SITE_URL } from "@/lib/brand"
+import { carPublicPath } from "@/lib/car-url"
 
 export const dynamic = "force-dynamic"
 
@@ -17,7 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]
 
   const carPages: MetadataRoute.Sitemap = cars.map((car) => ({
-    url: `${SITE_URL}/cars/${car.id}`,
+    url: `${SITE_URL}${carPublicPath(car)}`,
     lastModified: car.updatedAt ?? now,
     changeFrequency: "weekly",
     priority: 0.8,

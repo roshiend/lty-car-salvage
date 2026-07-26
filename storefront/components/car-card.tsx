@@ -8,6 +8,7 @@ import { Gauge, Eye, TrendingDown, Car as CarIcon, Fuel, Settings2 } from "lucid
 import type { Car } from "@/lib/db/schema"
 import { stockStatusLabel } from "@/lib/car-status"
 import { CarPhoto } from "@/components/car-photo"
+import { carPublicPath } from "@/lib/car-url"
 
 interface CarCardProps {
   car: Car
@@ -101,14 +102,14 @@ export function CarCard({ car, compact }: CarCardProps) {
 
       <CardFooter className={`pt-0 gap-2 ${compact ? "p-3" : "p-4"}`}>
         <Button variant="outline" className="flex-1" asChild>
-          <Link href={`/cars/${car.id}`}>
+          <Link href={carPublicPath(car)}>
             <Eye className="h-4 w-4 mr-2" />
             View Details
           </Link>
         </Button>
         {!isSold && (
           <Button className="flex-1" asChild>
-            <Link href={`/cars/${car.id}#enquire`}>Enquire Now</Link>
+            <Link href={`${carPublicPath(car)}#enquire`}>Enquire Now</Link>
           </Button>
         )}
       </CardFooter>
