@@ -55,10 +55,11 @@ export function Inventory({ cars }: InventoryProps) {
       <div className="container mx-auto px-4">
         <div className="text-center mb-10">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4 text-balance">
-            Our Current Stock
+            Browse Our Stock
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-pretty">
-            Browse workshop-repaired salvage cars below market value. New stock added as it becomes ready.
+            All listings in one place — available, reserved, reduced, and sold. Workshop-repaired salvage
+            vehicles priced below market value.
           </p>
         </div>
 

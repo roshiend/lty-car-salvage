@@ -25,6 +25,9 @@ export function CarCard({ car, compact }: CarCardProps) {
 
   const price = Number(car.price)
   const marketValue = Number(car.marketValue)
+  const savings = Math.max(0, marketValue - price)
+  const savingsPercent =
+    marketValue > 0 ? Math.round((savings / marketValue) * 100) : 0
   const status = stockStatusLabel(car.status)
   const isSold = car.isSold || car.status === "sold"
 
@@ -77,11 +80,24 @@ export function CarCard({ car, compact }: CarCardProps) {
           </p>
         </div>
 
-        <div className="flex items-baseline gap-2 mb-3">
-          <p className={`font-bold text-primary ${compact ? "text-xl" : "text-2xl"}`}>
-            £{price.toLocaleString()}
+        <div className="mb-3">
+          <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+            <p className={`font-bold text-primary ${compact ? "text-xl" : "text-2xl"}`}>
+              £{price.toLocaleString()}
+            </p>
+            {savings > 0 && (
+              <span
+                className={`inline-flex items-center font-semibold text-emerald-700 dark:text-emerald-400 ${compact ? "text-xs" : "text-sm"}`}
+              >
+                <TrendingDown className="h-3.5 w-3.5 mr-0.5 shrink-0" aria-hidden />
+                Save £{savings.toLocaleString()}
+                {!compact && savingsPercent > 0 ? ` (${savingsPercent}%)` : ""}
+              </span>
+            )}
+          </div>
+          <p className="text-sm text-muted-foreground line-through mt-0.5">
+            £{marketValue.toLocaleString()}
           </p>
-          <p className="text-sm text-muted-foreground line-through">£{marketValue.toLocaleString()}</p>
         </div>
 
         <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">

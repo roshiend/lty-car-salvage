@@ -235,10 +235,10 @@ ${message}`
         </Card>
       </div>
 
-      {/* Right Column - Pricing & Enquiry */}
-      <div className="space-y-6">
+      {/* Right Column - Pricing & Enquiry (sticky together on desktop) */}
+      <div className="space-y-6 lg:sticky lg:top-4 lg:self-start">
         {/* Pricing Card */}
-        <Card className="bg-card border-border sticky top-4">
+        <Card className="bg-card border-border">
           <CardContent className="p-6">
             <div className="mb-4">
               <div className="flex items-center gap-2 mb-2">
