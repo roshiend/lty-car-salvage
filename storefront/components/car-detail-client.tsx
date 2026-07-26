@@ -23,6 +23,7 @@ import {
   ChevronLeft,
   ChevronRight,
   CheckCircle,
+  AlertTriangle,
 } from "lucide-react"
 import { whatsappUrl } from "@/lib/contact"
 import { COMPANY_EMAIL } from "@/lib/brand"
@@ -193,20 +194,45 @@ ${message}`
           </CardContent>
         </Card>
 
-        {/* Description */}
-        {car.description && (
-          <Card className="bg-card border-border">
-            <CardHeader>
-              <CardTitle className="text-foreground">About This Vehicle</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground whitespace-pre-line">{car.description}</p>
-              <p className="text-xs text-muted-foreground mt-4 pt-4 border-t border-border">
-                This is a previously salvaged vehicle that has been repaired in our workshop. Sold below market value.
+        {/* Description & buyer notes */}
+        <Card className="bg-card border-border">
+          <CardHeader>
+            <CardTitle className="text-foreground">About This Vehicle</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div
+              className="rounded-lg border-2 border-amber-500/80 bg-amber-50 dark:bg-amber-950/40 p-4"
+              role="note"
+              aria-label="Important buyer information"
+            >
+              <div className="flex items-center gap-2 mb-3">
+                <AlertTriangle className="h-5 w-5 text-amber-700 dark:text-amber-400 shrink-0" aria-hidden />
+                <p className="font-semibold text-amber-950 dark:text-amber-100 text-sm">
+                  Important — please read before you buy
+                </p>
+              </div>
+              <ul className="space-y-2.5">
+                {[
+                  "May not include a full service history",
+                  "Not HPI clear",
+                  "Previously salvaged vehicle",
+                ].map((line) => (
+                  <li key={line} className="flex items-start gap-2 text-sm font-medium text-amber-950 dark:text-amber-50">
+                    <span className="text-amber-600 dark:text-amber-400 font-bold shrink-0" aria-hidden>
+                      !
+                    </span>
+                    <span>{line}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            {car.description ? (
+              <p className="text-muted-foreground whitespace-pre-line pt-2 border-t border-border">
+                {car.description}
               </p>
-            </CardContent>
-          </Card>
-        )}
+            ) : null}
+          </CardContent>
+        </Card>
       </div>
 
       {/* Right Column - Pricing & Enquiry */}
