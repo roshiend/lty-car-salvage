@@ -20,7 +20,7 @@ export function CarPhoto({ src, alt, className = "", fill, sizes, priority }: Ca
         src={trimmed}
         alt={alt}
         referrerPolicy="no-referrer"
-        className={`${fill ? "absolute inset-0 h-full w-full object-cover " : ""}${className}`}
+        className={`${fill ? "absolute inset-0 h-full w-full object-contain " : ""}${className}`}
       />
     )
   }

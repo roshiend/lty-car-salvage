@@ -110,7 +110,7 @@ ${message}`
                   alt={`${car.year} ${car.make} ${car.model}`}
                   fill
                   sizes="(max-width: 1024px) 100vw, 66vw"
-                  className="object-cover"
+                  className="object-contain"
                   priority
                 />
                 {images.length > 1 && (
@@ -165,7 +165,7 @@ ${message}`
                     alt={`Thumbnail ${idx + 1}`}
                     fill
                     sizes="80px"
-                    className="object-cover"
+                    className="object-contain"
                   />
                 </button>
               ))}
