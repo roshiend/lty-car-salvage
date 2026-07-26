@@ -50,7 +50,22 @@ export default function ImageUploader({ images, onChange, onUploadingChange }: I
 
       try {
         const res = await fetch("/api/upload", { method: "POST", body: formData })
-        const data = await res.json()
+        let data: { error?: string; urls?: string[] } = {}
+        try {
+          data = await res.json()
+        } catch {
+          setUploadError(
+            res.status === 413
+              ? "File too large for the server. Try a photo under 4MB."
+              : `Upload failed (HTTP ${res.status}).`
+          )
+          setUploading((prev) =>
+            prev.map((u) =>
+              newUploading.find((n) => n.id === u.id) ? { ...u, progress: "error" } : u
+            )
+          )
+          return
+        }
 
         if (!res.ok || data.error) {
           setUploadError(
@@ -136,8 +151,7 @@ export default function ImageUploader({ images, onChange, onUploadingChange }: I
       >
         <p className="font-semibold">Cloudinary (free plan)</p>
         <p className="text-xs mt-1" style={{ color: "#15803d" }}>
-          JPG, PNG, or WebP up to 10MB each. Photos are stored in your Cloudinary account and shown on
-          ltyway.co.uk.
+          JPEG, PNG, or WebP up to 4MB each (fits Vercel and Cloudinary free tier).
         </p>
       </div>
 

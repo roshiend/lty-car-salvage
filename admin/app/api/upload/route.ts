@@ -1,23 +1,36 @@
 import { NextRequest, NextResponse } from "next/server"
 import { headers } from "next/headers"
 import { auth } from "@/lib/auth"
-import { cloudinary, CLOUDINARY_FOLDER, configureCloudinary } from "@/lib/cloudinary"
+import { configureCloudinary, formatUploadError, uploadImageBuffer } from "@/lib/cloudinary"
 
-const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"]
-const MAX_SIZE_MB = 10
+const ALLOWED_TYPES = new Set([
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+  "image/heic",
+  "image/heif",
+])
+const MAX_SIZE_MB = 4
+
+function isAllowedImage(file: File): boolean {
+  if (ALLOWED_TYPES.has(file.type)) return true
+  const ext = file.name.split(".").pop()?.toLowerCase()
+  return ext === "jpg" || ext === "jpeg" || ext === "png" || ext === "webp" || ext === "heic"
+}
 
 export async function POST(request: NextRequest) {
   try {
     const session = await auth.api.getSession({ headers: await headers() })
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+      return NextResponse.json({ error: "Unauthorized — sign in again." }, { status: 401 })
     }
 
     if (!configureCloudinary()) {
       return NextResponse.json(
         {
           error:
-            "Cloudinary is not configured. Set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET on Vercel.",
+            "Cloudinary is not configured. Add CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET to admin/.env.local (local) or Vercel env (production), then restart or redeploy.",
         },
         { status: 503 }
       )
@@ -33,36 +46,32 @@ export async function POST(request: NextRequest) {
     const urls: string[] = []
 
     for (const file of files) {
-      if (!ALLOWED_TYPES.includes(file.type)) {
+      if (!isAllowedImage(file)) {
         return NextResponse.json(
-          { error: `Invalid file type: ${file.type}. Use JPEG, PNG, or WebP.` },
+          {
+            error: `Unsupported file "${file.name}". Use JPEG, PNG, or WebP (max ${MAX_SIZE_MB}MB).`,
+          },
           { status: 400 }
         )
       }
 
       if (file.size > MAX_SIZE_MB * 1024 * 1024) {
         return NextResponse.json(
-          { error: `File too large (max ${MAX_SIZE_MB}MB on Cloudinary free tier).` },
+          {
+            error: `"${file.name}" is too large. Max ${MAX_SIZE_MB}MB per file (Vercel + free tier limit).`,
+          },
           { status: 400 }
         )
       }
 
       const buffer = Buffer.from(await file.arrayBuffer())
-      const dataUri = `data:${file.type};base64,${buffer.toString("base64")}`
-
-      const result = await cloudinary.uploader.upload(dataUri, {
-        folder: CLOUDINARY_FOLDER,
-        resource_type: "image",
-        // Keeps bandwidth/storage reasonable on the free plan
-        transformation: [{ width: 1920, height: 1920, crop: "limit" }, { quality: "auto:good" }],
-      })
-
+      const result = await uploadImageBuffer(buffer)
       urls.push(result.secure_url)
     }
 
     return NextResponse.json({ urls })
   } catch (error) {
     console.error("Cloudinary upload error:", error)
-    return NextResponse.json({ error: "Upload failed" }, { status: 500 })
+    return NextResponse.json({ error: formatUploadError(error) }, { status: 500 })
   }
 }

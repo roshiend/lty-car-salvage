@@ -27,6 +27,25 @@ export function getGoogleClientSecret(): string {
   return cleanEnv(process.env.GOOGLE_CLIENT_SECRET) ?? ""
 }
 
+/** Like cleanEnv but safe for API secrets (no false reject on the word SECRET). */
+export function cleanSecretEnv(value: string | undefined): string | undefined {
+  if (!value) return undefined
+  const firstLine = value.trim().split(/\r?\n/)[0]?.trim()
+  return firstLine || undefined
+}
+
+export function getCloudinaryCloudName(): string {
+  return cleanEnv(process.env.CLOUDINARY_CLOUD_NAME) ?? ""
+}
+
+export function getCloudinaryApiKey(): string {
+  return cleanEnv(process.env.CLOUDINARY_API_KEY) ?? ""
+}
+
+export function getCloudinaryApiSecret(): string {
+  return cleanSecretEnv(process.env.CLOUDINARY_API_SECRET) ?? ""
+}
+
 export function resolveMainSiteUrl(): string {
   const fromEnv = cleanEnv(process.env.NEXT_PUBLIC_MAIN_SITE_URL)
   if (fromEnv && !fromEnv.includes(".vercel.app")) return fromEnv
