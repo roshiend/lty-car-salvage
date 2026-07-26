@@ -64,6 +64,8 @@ function Card({ title, children, noPad }: { title?: string; children: React.Reac
 
 export default function CarForm({ car }: CarFormProps) {
   const [loading, setLoading] = useState(false)
+  const [photosUploading, setPhotosUploading] = useState(false)
+  const [saveError, setSaveError] = useState("")
   const [selectedStatus, setSelectedStatus] = useState(car?.status ?? "available")
   const [images, setImages] = useState<string[]>(car?.images || [])
   const [features, setFeatures] = useState<string[]>(car?.features || [])
@@ -80,6 +82,11 @@ export default function CarForm({ car }: CarFormProps) {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setSaveError("")
+    if (photosUploading) {
+      setSaveError("Wait for photo uploads to finish before saving.")
+      return
+    }
     setLoading(true)
     const fd = new FormData(e.currentTarget)
     fd.set("images", JSON.stringify(images))
@@ -88,11 +95,20 @@ export default function CarForm({ car }: CarFormProps) {
       car ? await updateCar(car.id, fd) : await createCar(fd)
     } catch {
       setLoading(false)
+      setSaveError("Could not save — check required fields and try again.")
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className="pb-16">
+      {saveError && (
+        <div
+          className="mb-4 rounded-xl border px-4 py-3 text-sm"
+          style={{ background: "#fef2f2", borderColor: "#fecaca", color: "#b91c1c" }}
+        >
+          {saveError}
+        </div>
+      )}
 
       {/* ── Sticky top header bar ── */}
       <div
@@ -193,7 +209,17 @@ export default function CarForm({ car }: CarFormProps) {
 
           {/* Media */}
           <Card title="Media">
-            <ImageUploader images={images} onChange={setImages} />
+            <ImageUploader
+              images={images}
+              onChange={setImages}
+              onUploadingChange={setPhotosUploading}
+            />
+            {images.length === 0 && !photosUploading && (
+              <p className="text-xs mt-2" style={{ color: "#b45309" }}>
+                No photos saved yet — upload here, then click Save. On production, admin needs{" "}
+                <code className="text-[11px]">BLOB_READ_WRITE_TOKEN</code> in Vercel.
+              </p>
+            )}
           </Card>
 
           {/* Pricing */}
@@ -380,6 +406,10 @@ export default function CarForm({ car }: CarFormProps) {
                 )
               })}
             </div>
+            <p className="text-xs mt-3" style={{ color: "#64748b" }}>
+              All statuses (Available, Reserved, Reduced, Sold) appear on the public stock section. Dummy
+              listings stay admin-only.
+            </p>
           </Card>
 
           {/* Organisation */}

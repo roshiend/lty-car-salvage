@@ -5,6 +5,7 @@ import { cars } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
+import { revalidateStorefront } from "@/lib/revalidate-storefront"
 
 export async function createCar(formData: FormData) {
   const status = (formData.get("status") as string) || "available"
@@ -32,11 +33,13 @@ export async function createCar(formData: FormData) {
       .filter(Boolean) || [],
     status,
     isSold: status === "sold",
+    isDummy: false,
   }
 
-  await db.insert(cars).values(data)
+  const inserted = await db.insert(cars).values(data).returning({ id: cars.id })
   revalidatePath("/cars")
   revalidatePath("/dashboard")
+  await revalidateStorefront(inserted[0]?.id)
   redirect("/cars")
 }
 
@@ -72,6 +75,7 @@ export async function updateCar(id: number, formData: FormData) {
   await db.update(cars).set(data).where(eq(cars.id, id))
   revalidatePath("/cars")
   revalidatePath("/dashboard")
+  await revalidateStorefront(id)
   redirect("/cars")
 }
 
@@ -79,12 +83,14 @@ export async function deleteCar(id: number) {
   await db.delete(cars).where(eq(cars.id, id))
   revalidatePath("/cars")
   revalidatePath("/dashboard")
+  await revalidateStorefront()
 }
 
 export async function deleteAllDummyCars() {
   await db.delete(cars).where(eq(cars.isDummy, true))
   revalidatePath("/cars")
   revalidatePath("/dashboard")
+  await revalidateStorefront()
 }
 
 export async function updateCarStatus(id: number, status: string) {
@@ -94,10 +100,12 @@ export async function updateCarStatus(id: number, status: string) {
     .where(eq(cars.id, id))
   revalidatePath("/cars")
   revalidatePath("/dashboard")
+  await revalidateStorefront(id)
 }
 
 export async function toggleSold(id: number, isSold: boolean) {
   await db.update(cars).set({ isSold, updatedAt: new Date() }).where(eq(cars.id, id))
   revalidatePath("/cars")
   revalidatePath("/dashboard")
+  await revalidateStorefront(id)
 }

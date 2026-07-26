@@ -3,7 +3,7 @@
 import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { cars } from "@/lib/db/schema"
-import { eq, desc, and } from "drizzle-orm"
+import { eq, desc } from "drizzle-orm"
 import { headers } from "next/headers"
 import { revalidatePath } from "next/cache"
 
@@ -23,7 +23,7 @@ export async function getCars(includeAll = false) {
     return db
       .select()
       .from(cars)
-      .where(and(eq(cars.isSold, false), eq(cars.isDummy, false)))
+      .where(eq(cars.isDummy, false))
       .orderBy(desc(cars.createdAt))
   } catch (error) {
     console.error("Failed to fetch cars:", error)
@@ -37,7 +37,7 @@ export async function getCarById(id: number) {
   try {
     const result = await db.select().from(cars).where(eq(cars.id, id))
     const car = result[0] || null
-    if (car?.isDummy) return null
+    if (!car || car.isDummy) return null
     return car
   } catch (error) {
     console.error("Failed to fetch car:", error)

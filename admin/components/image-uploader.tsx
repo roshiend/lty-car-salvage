@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useCallback } from "react"
+import { useState, useRef, useCallback, useEffect, type Dispatch, type SetStateAction } from "react"
 import {
   Upload,
   X,
@@ -15,7 +15,8 @@ import {
 
 interface ImageUploaderProps {
   images: string[]
-  onChange: (images: string[]) => void
+  onChange: Dispatch<SetStateAction<string[]>>
+  onUploadingChange?: (uploading: boolean) => void
 }
 
 interface UploadingFile {
@@ -25,9 +26,10 @@ interface UploadingFile {
   progress: "uploading" | "done" | "error"
 }
 
-export default function ImageUploader({ images, onChange }: ImageUploaderProps) {
+export default function ImageUploader({ images, onChange, onUploadingChange }: ImageUploaderProps) {
   const [dragOver, setDragOver] = useState(false)
   const [uploading, setUploading] = useState<UploadingFile[]>([])
+  const [uploadError, setUploadError] = useState("")
   const [urlInput, setUrlInput] = useState("")
   const [urlError, setUrlError] = useState("")
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -45,6 +47,7 @@ export default function ImageUploader({ images, onChange }: ImageUploaderProps) 
         progress: "uploading",
       }))
       setUploading((prev) => [...prev, ...newUploading])
+      setUploadError("")
 
       const formData = new FormData()
       imageFiles.forEach((f) => formData.append("files", f))
@@ -54,7 +57,9 @@ export default function ImageUploader({ images, onChange }: ImageUploaderProps) 
         const data = await res.json()
 
         if (!res.ok || data.error) {
-          // Mark as error
+          const message =
+            typeof data.error === "string" ? data.error : "Upload failed — check you are signed in and BLOB_READ_WRITE_TOKEN is set on Vercel."
+          setUploadError(message)
           setUploading((prev) =>
             prev.map((u) =>
               newUploading.find((n) => n.id === u.id)
@@ -65,7 +70,8 @@ export default function ImageUploader({ images, onChange }: ImageUploaderProps) 
           return
         }
 
-        // Mark as done and add to images list
+        onChange((prev) => [...prev, ...(data.urls as string[])])
+
         setUploading((prev) =>
           prev.map((u) =>
             newUploading.find((n) => n.id === u.id)
@@ -73,8 +79,6 @@ export default function ImageUploader({ images, onChange }: ImageUploaderProps) 
               : u
           )
         )
-
-        onChange([...images, ...data.urls])
 
         // Clean up done entries after a short delay
         setTimeout(() => {
@@ -85,6 +89,7 @@ export default function ImageUploader({ images, onChange }: ImageUploaderProps) 
           newUploading.forEach((u) => URL.revokeObjectURL(u.preview))
         }, 1200)
       } catch {
+        setUploadError("Upload failed — network or server error.")
         setUploading((prev) =>
           prev.map((u) =>
             newUploading.find((n) => n.id === u.id)
@@ -94,7 +99,7 @@ export default function ImageUploader({ images, onChange }: ImageUploaderProps) 
         )
       }
     },
-    [images, onChange]
+    [onChange]
   )
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -119,7 +124,7 @@ export default function ImageUploader({ images, onChange }: ImageUploaderProps) 
   }
 
   const removeImage = (index: number) => {
-    onChange(images.filter((_, i) => i !== index))
+    onChange((prev) => prev.filter((_, i) => i !== index))
   }
 
   const removeUploading = (id: string) => {
@@ -136,15 +141,27 @@ export default function ImageUploader({ images, onChange }: ImageUploaderProps) 
       setUrlError("Please enter a valid URL")
       return
     }
-    onChange([...images, url])
+    onChange((prev) => [...prev, url])
     setUrlInput("")
   }
 
   const isAnyUploading = uploading.some((u) => u.progress === "uploading")
   const hasImages = images.length > 0 || uploading.length > 0
 
+  useEffect(() => {
+    onUploadingChange?.(isAnyUploading)
+  }, [isAnyUploading, onUploadingChange])
+
   return (
     <div className="space-y-4">
+      {uploadError && (
+        <div
+          className="rounded-xl border px-4 py-3 text-sm"
+          style={{ background: "#fef2f2", borderColor: "#fecaca", color: "#b91c1c" }}
+        >
+          {uploadError}
+        </div>
+      )}
       {/* Drop zone */}
       <div
         onDragOver={handleDragOver}

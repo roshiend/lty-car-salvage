@@ -7,12 +7,15 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Gauge, Eye, TrendingDown, Car as CarIcon, Fuel, Settings2 } from "lucide-react"
 import type { Car } from "@/lib/db/schema"
+import { stockStatusLabel } from "@/lib/car-status"
 
 interface CarCardProps {
   car: Car
+  /** Shorter image area for homepage stock grid */
+  compact?: boolean
 }
 
-export function CarCard({ car }: CarCardProps) {
+export function CarCard({ car, compact }: CarCardProps) {
   const categoryColor = {
     "Cat S": "bg-destructive text-destructive-foreground",
     "Cat N": "bg-accent text-accent-foreground",
@@ -21,10 +24,16 @@ export function CarCard({ car }: CarCardProps) {
 
   const price = Number(car.price)
   const marketValue = Number(car.marketValue)
+  const status = stockStatusLabel(car.status)
+  const isSold = car.isSold || car.status === "sold"
 
   return (
-    <Card className="group overflow-hidden bg-card border-border hover:border-primary/50 transition-all duration-300">
-      <div className="relative aspect-[4/3] overflow-hidden bg-secondary">
+    <Card
+      className={`group overflow-hidden bg-card border-border hover:border-primary/50 transition-all duration-300 ${isSold ? "opacity-90" : ""}`}
+    >
+      <div
+        className={`relative overflow-hidden bg-secondary ${compact ? "aspect-[2/1]" : "aspect-[4/3]"}`}
+      >
         {car.images && car.images.length > 0 ? (
           <Image
             src={car.images[0]}
@@ -35,25 +44,31 @@ export function CarCard({ car }: CarCardProps) {
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <CarIcon className="h-16 w-16 text-muted-foreground" />
+            <CarIcon className={`text-muted-foreground ${compact ? "h-10 w-10" : "h-16 w-16"}`} />
           </div>
         )}
-        <div className="absolute top-3 left-3 flex gap-2">
+        <div className="absolute top-2 left-2 flex flex-wrap gap-1.5">
           <Badge className={categoryColor[car.category as keyof typeof categoryColor] || "bg-secondary"}>
             {car.category}
           </Badge>
         </div>
-        <div className="absolute top-3 right-3">
-          <Badge variant="secondary" className="bg-primary text-primary-foreground">
-            <TrendingDown className="h-3 w-3 mr-1" />
-            Below market
-          </Badge>
+        <div className="absolute top-2 right-2 flex flex-col items-end gap-1.5">
+          <Badge className={status.className}>{status.label}</Badge>
+          {!isSold && (
+            <Badge variant="secondary" className="bg-primary text-primary-foreground text-xs">
+              <TrendingDown className="h-3 w-3 mr-1" />
+              Below market
+            </Badge>
+          )}
         </div>
+        {isSold && (
+          <div className="absolute inset-0 bg-background/25 pointer-events-none" aria-hidden />
+        )}
       </div>
 
-      <CardContent className="p-4">
+      <CardContent className={compact ? "p-3" : "p-4"}>
         <div className="mb-2">
-          <h3 className="font-semibold text-lg text-foreground">
+          <h3 className={`font-semibold text-foreground ${compact ? "text-base" : "text-lg"}`}>
             {car.year} {car.make} {car.model}
           </h3>
           <p className="text-sm text-muted-foreground">
@@ -62,7 +77,9 @@ export function CarCard({ car }: CarCardProps) {
         </div>
 
         <div className="flex items-baseline gap-2 mb-3">
-          <p className="text-2xl font-bold text-primary">£{price.toLocaleString()}</p>
+          <p className={`font-bold text-primary ${compact ? "text-xl" : "text-2xl"}`}>
+            £{price.toLocaleString()}
+          </p>
           <p className="text-sm text-muted-foreground line-through">£{marketValue.toLocaleString()}</p>
         </div>
 
@@ -82,16 +99,18 @@ export function CarCard({ car }: CarCardProps) {
         </div>
       </CardContent>
 
-      <CardFooter className="p-4 pt-0 gap-2">
+      <CardFooter className={`pt-0 gap-2 ${compact ? "p-3" : "p-4"}`}>
         <Button variant="outline" className="flex-1" asChild>
           <Link href={`/cars/${car.id}`}>
             <Eye className="h-4 w-4 mr-2" />
             View Details
           </Link>
         </Button>
-        <Button className="flex-1" asChild>
-          <Link href={`/cars/${car.id}#enquire`}>Enquire Now</Link>
-        </Button>
+        {!isSold && (
+          <Button className="flex-1" asChild>
+            <Link href={`/cars/${car.id}#enquire`}>Enquire Now</Link>
+          </Button>
+        )}
       </CardFooter>
     </Card>
   )
