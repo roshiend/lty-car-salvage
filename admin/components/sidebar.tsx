@@ -13,6 +13,7 @@ import {
   ChevronRight,
   Menu,
   X,
+  BarChart3,
 } from "lucide-react"
 
 import { MAIN_SITE_URL } from "@/lib/site"
@@ -21,6 +22,7 @@ const mainSiteUrl = MAIN_SITE_URL
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/cars", label: "Inventory", icon: Car },
 ]
 

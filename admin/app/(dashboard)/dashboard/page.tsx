@@ -227,9 +227,13 @@ export default async function DashboardPage() {
             <h2 className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
               Storefront visitors
             </h2>
-            <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-              Unique visitors on ltyway.co.uk (UTC days)
-            </p>
+            <Link
+              href="/analytics"
+              className="text-xs font-semibold"
+              style={{ color: "var(--brand)" }}
+            >
+              Detailed analytics →
+            </Link>
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
             {visitorStatCards.map((stat) => (

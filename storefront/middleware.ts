@@ -8,6 +8,8 @@ import {
   isValidVisitorId,
   recordStorefrontVisit,
 } from "@/lib/record-storefront-visit"
+import { classifyTrafficSource } from "@/lib/traffic-source"
+import { getVisitGeo } from "@/lib/visit-geo"
 
 async function redirectLegacyNumericCarUrl(request: NextRequest): Promise<NextResponse | null> {
   const match = request.nextUrl.pathname.match(/^\/cars\/(\d+)\/?$/)
@@ -78,8 +80,35 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
   attachVisitorCookie(response, visitorId!, isNewVisitor)
 
   if (process.env.DATABASE_URL) {
+    const url = request.nextUrl
+    const referrer = request.headers.get("referer")
+    const utmSource = url.searchParams.get("utm_source")
+    const utmMedium = url.searchParams.get("utm_medium")
+    const utmCampaign = url.searchParams.get("utm_campaign")
+    const { trafficSource, referrerHost } = classifyTrafficSource({
+      referrer,
+      utmSource,
+      utmMedium,
+      hasFbclid: url.searchParams.has("fbclid"),
+      hasGclid: url.searchParams.has("gclid"),
+    })
+    const geo = getVisitGeo(request)
+    const path = url.pathname
+
     event.waitUntil(
-      recordStorefrontVisit(visitorId!).catch((error) => {
+      recordStorefrontVisit({
+        visitorId: visitorId!,
+        path,
+        referrer,
+        referrerHost,
+        trafficSource,
+        utmSource,
+        utmMedium,
+        utmCampaign,
+        country: geo.country,
+        region: geo.region,
+        city: geo.city,
+      }).catch((error) => {
         console.error("Storefront visit tracking failed:", error)
       })
     )

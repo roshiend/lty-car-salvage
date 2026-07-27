@@ -112,3 +112,21 @@ export const storefrontVisitorDays = pgTable(
   },
   (table) => [primaryKey({ columns: [table.visitorId, table.visitDate] })]
 )
+
+export const storefrontPageViews = pgTable("storefront_page_views", {
+  id: serial("id").primaryKey(),
+  visitorId: uuid("visitor_id")
+    .notNull()
+    .references(() => storefrontVisitors.id, { onDelete: "cascade" }),
+  path: text("path").notNull(),
+  referrer: text("referrer"),
+  referrerHost: text("referrer_host"),
+  trafficSource: text("traffic_source").notNull(),
+  utmSource: text("utm_source"),
+  utmMedium: text("utm_medium"),
+  utmCampaign: text("utm_campaign"),
+  country: text("country"),
+  region: text("region"),
+  city: text("city"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+})
