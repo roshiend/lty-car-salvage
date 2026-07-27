@@ -3,6 +3,7 @@ import {
   integer,
   numeric,
   pgTable,
+  primaryKey,
   serial,
   text,
   timestamp,
@@ -92,3 +93,22 @@ export const cars = pgTable("cars", {
 
 export type Car = typeof cars.$inferSelect
 export type NewCar = typeof cars.$inferInsert
+
+/** Anonymous storefront visitors (first-party cookie). */
+export const storefrontVisitors = pgTable("storefront_visitors", {
+  id: uuid("id").primaryKey(),
+  firstSeenAt: timestamp("first_seen_at", { withTimezone: true }).notNull().defaultNow(),
+  lastSeenAt: timestamp("last_seen_at", { withTimezone: true }).notNull().defaultNow(),
+})
+
+/** One row per visitor per calendar day (UTC) for unique daily counts. */
+export const storefrontVisitorDays = pgTable(
+  "storefront_visitor_days",
+  {
+    visitorId: uuid("visitor_id")
+      .notNull()
+      .references(() => storefrontVisitors.id, { onDelete: "cascade" }),
+    visitDate: date("visit_date").notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.visitorId, table.visitDate] })]
+)

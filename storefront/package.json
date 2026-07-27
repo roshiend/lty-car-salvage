@@ -7,7 +7,8 @@
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint .",
-    "migrate:public-id": "tsx scripts/migrate-car-public-id.ts"
+    "migrate:public-id": "tsx scripts/migrate-car-public-id.ts",
+    "migrate:visitors": "tsx scripts/migrate-storefront-visitors.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

@@ -1,6 +1,7 @@
 import { db } from "@/lib/db"
 import { cars } from "@/lib/db/schema"
 import { desc } from "drizzle-orm"
+import { getStorefrontVisitorStats } from "@/lib/visitor-stats"
 import {
   Car,
   TrendingUp,
@@ -11,6 +12,7 @@ import {
   Eye,
   Pencil,
   Clock,
+  Users,
 } from "lucide-react"
 import Link from "next/link"
 import { MAIN_SITE_URL } from "@/lib/site"
@@ -18,7 +20,10 @@ import { carPublicPath } from "@/lib/car-url"
 import { getStatus } from "@/lib/car-status"
 
 export default async function DashboardPage() {
-  const allCars = await db.select().from(cars).orderBy(desc(cars.createdAt))
+  const [allCars, visitorStats] = await Promise.all([
+    db.select().from(cars).orderBy(desc(cars.createdAt)),
+    getStorefrontVisitorStats(),
+  ])
   const liveCars = allCars.filter((car) => !car.isDummy)
   const dummyCars = allCars.filter((car) => car.isDummy)
 
@@ -96,6 +101,52 @@ export default async function DashboardPage() {
     }
   }).filter((c) => c.count > 0)
 
+  const visitorStatCards =
+    visitorStats === null
+      ? null
+      : [
+          {
+            label: "Visitors Today",
+            value: visitorStats.today.toLocaleString(),
+            sub: "Unique (storefront)",
+            icon: Users,
+            iconColor: "#0d9488",
+            iconBg: "#f0fdfa",
+            borderColor: "#99f6e4",
+            accent: "#0d9488",
+          },
+          {
+            label: "Last 7 Days",
+            value: visitorStats.last7Days.toLocaleString(),
+            sub: "Unique visitors",
+            icon: Users,
+            iconColor: "#0891b2",
+            iconBg: "#ecfeff",
+            borderColor: "#a5f3fc",
+            accent: "#0891b2",
+          },
+          {
+            label: "Last 30 Days",
+            value: visitorStats.last30Days.toLocaleString(),
+            sub: "Unique visitors",
+            icon: Users,
+            iconColor: "#0284c7",
+            iconBg: "#f0f9ff",
+            borderColor: "#bae6fd",
+            accent: "#0284c7",
+          },
+          {
+            label: "All-Time Visitors",
+            value: visitorStats.allTime.toLocaleString(),
+            sub: "Distinct cookies",
+            icon: Users,
+            iconColor: "#4f46e5",
+            iconBg: "#eef2ff",
+            borderColor: "#c7d2fe",
+            accent: "#4f46e5",
+          },
+        ]
+
   return (
     <div>
       {/* Page header */}
@@ -169,6 +220,57 @@ export default async function DashboardPage() {
           </div>
         ))}
       </div>
+
+      {visitorStatCards ? (
+        <div className="mb-6 lg:mb-8">
+          <div className="flex items-center justify-between gap-2 mb-3">
+            <h2 className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
+              Storefront visitors
+            </h2>
+            <p className="text-xs" style={{ color: "var(--text-muted)" }}>
+              Unique visitors on ltyway.co.uk (UTC days)
+            </p>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
+            {visitorStatCards.map((stat) => (
+              <div
+                key={stat.label}
+                className="rounded-2xl p-4 lg:p-5 border"
+                style={{ background: "#ffffff", borderColor: "var(--border)", boxShadow: "var(--shadow-sm)" }}
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="text-xs font-semibold uppercase tracking-wider truncate" style={{ color: "var(--text-muted)" }}>
+                      {stat.label}
+                    </p>
+                    <p className="text-2xl lg:text-3xl font-bold mt-2 truncate" style={{ color: "var(--text-primary)" }}>
+                      {stat.value}
+                    </p>
+                    <p className="text-xs mt-1 truncate" style={{ color: "var(--text-muted)" }}>
+                      {stat.sub}
+                    </p>
+                  </div>
+                  <div
+                    className="w-9 h-9 lg:w-10 lg:h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                    style={{ background: stat.iconBg, border: `1px solid ${stat.borderColor}` }}
+                  >
+                    <stat.icon className="w-4 h-4 lg:w-5 lg:h-5" style={{ color: stat.iconColor }} />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div
+          className="mb-6 lg:mb-8 rounded-2xl border px-4 py-3 text-sm"
+          style={{ background: "#fffbeb", borderColor: "#fcd34d", color: "#92400e" }}
+        >
+          Storefront visitor stats are not available yet. Run{" "}
+          <code className="text-xs bg-white/80 px-1 py-0.5 rounded">pnpm migrate:visitors</code> from the
+          storefront app against your database.
+        </div>
+      )}
 
       {/* Main content: recent cars + breakdowns */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 lg:gap-6">
